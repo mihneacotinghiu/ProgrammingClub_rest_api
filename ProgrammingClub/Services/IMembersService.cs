@@ -7,7 +7,7 @@ namespace ProgrammingClub.Services
     public interface IMembersService
     {
         public Task<IEnumerable<Member>> GetMembers();
-        public Task CreateMember(Member member);
+        public Task CreateMember(CreateMember member);
         public Task<bool> DeleteMember(Guid id);
         public Task<Member?> UpdateMember(Guid idMember, Member member);
         public Task<Member?> UpdatePartiallyMember(Guid idMember, Member member);

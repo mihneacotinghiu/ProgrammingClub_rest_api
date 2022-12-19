@@ -62,18 +62,7 @@ namespace ProgrammingClub.Controllers
             {
                 if (member != null)
                 {
-                    //await _membersService.isValid(member);
-                    Member newMember = new Member
-                    {
-                        IdMember = Guid.NewGuid(),
-                        Name = member.Name,
-                        Description = member.Description,
-                        Title = member.Title,
-                        Position = member.Position,
-                        Resume = member.Resume
-                    };
-                    
-                    await _membersService.CreateMember(newMember);
+                    await _membersService.CreateMember(member);
                     return Ok(SuccessMessegesEnum.ElementSuccesfullyAdded);
                 }
                 return StatusCode((int)HttpStatusCode.BadRequest);

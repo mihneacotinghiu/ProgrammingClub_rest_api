@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
+using ProgrammingClub.Models.CreateModels;
 
 namespace ProgrammingClub.Services
 {
@@ -29,12 +30,20 @@ namespace ProgrammingClub.Services
         {
             return _context.Members.ToList();
         }
-        public async Task CreateMember(Member member)
+        public async Task CreateMember(CreateMember member)
         {
-            member.IdMember = new Guid();
-            _context.Entry(member).State = EntityState.Added;
-            _context.SaveChanges();
-
+            member.IdMember = Guid.NewGuid();
+            Member newMember = new Member
+            {
+                IdMember = Guid.NewGuid(),
+                Name = member.Name,
+                Description = member.Description,
+                Title = member.Title,
+                Position = member.Position,
+                Resume = member.Resume
+            };
+            _context.Entry(newMember).State = EntityState.Added;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Member?> UpdatePartiallyMember(Guid idMember, Member member)
