@@ -11,7 +11,6 @@ namespace ProgrammingClub.Models.CreateModels
         public Guid IdMember { get; set; }
 
         [StringLength(250, MinimumLength = 3, ErrorMessage = ErrorMessagesEnum.IncorectSize)]
-        [RegularExpression("(^[a-z -']+$)", ErrorMessage = "The name needs to start with capittal letter")]
         [Required]
         public string Name { get; set; }
 

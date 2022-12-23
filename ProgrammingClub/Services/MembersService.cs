@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using AutoMapper;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Helpers;
@@ -10,10 +12,12 @@ namespace ProgrammingClub.Services
     public class MembersService : IMembersService
     {
         private readonly ProgrammingClubDataContext _context;
+        private readonly IMapper _mapper;
 
-        public MembersService(ProgrammingClubDataContext context)
+        public MembersService(ProgrammingClubDataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<bool> DeleteMember(Guid id)
@@ -32,16 +36,9 @@ namespace ProgrammingClub.Services
         }
         public async Task CreateMember(CreateMember member)
         {
-            member.IdMember = Guid.NewGuid();
-            Member newMember = new Member
-            {
-                IdMember = Guid.NewGuid(),
-                Name = member.Name,
-                Description = member.Description,
-                Title = member.Title,
-                Position = member.Position,
-                Resume = member.Resume
-            };
+            var newMember = _mapper.Map<Member>(member);
+            newMember.IdMember = Guid.NewGuid();
+            var name = member.Name;
             _context.Entry(newMember).State = EntityState.Added;
             await _context.SaveChangesAsync();
         }
