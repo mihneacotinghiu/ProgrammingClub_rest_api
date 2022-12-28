@@ -20,6 +20,7 @@ builder.Services.AddTransient<IAnnouncementsService, AnnouncementsService>();
 builder.Services.AddTransient<IMembershipsService, MembershipsService>();
 builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddTransient<IEventsService, EventsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
