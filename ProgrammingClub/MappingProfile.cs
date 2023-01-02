@@ -9,6 +9,7 @@ namespace CustomerPortal.API
         public MappingProfile()
         {
             CreateMap<Member, CreateMember>().ReverseMap();
+            CreateMap<CodeSnippet, CreateCodeSnippet>().ReverseMap();
         }
     }
 }
