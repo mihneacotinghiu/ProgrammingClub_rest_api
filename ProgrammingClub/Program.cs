@@ -18,6 +18,7 @@ builder.Services.AddTransient<ICodeSnippetsService, CodeSnippetsService>();
 builder.Services.AddTransient<IAnnouncementsService, AnnouncementsService>();
 builder.Services.AddTransient<IMembershipsService, MembershipsService>();
 builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>();
+builder.Services.AddTransient<IEventParticipantsService, EventParticipantsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
