@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
+using ProgrammingClub.Models.CreateModerator;
 using ProgrammingClub.Services;
 
 namespace ProgrammingClub.Controllers
@@ -20,7 +21,7 @@ namespace ProgrammingClub.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> PostModerator([FromBody] Moderator moderator)
+        public async Task<IActionResult> PostModerator([FromBody] CreateModerator moderator)
         {
             try
             {

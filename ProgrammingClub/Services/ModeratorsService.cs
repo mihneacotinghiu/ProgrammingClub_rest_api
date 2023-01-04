@@ -5,6 +5,7 @@ using AutoMapper.Execution;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
+using ProgrammingClub.Models.CreateModerator;
 using Member = ProgrammingClub.Models.Member;
 
 namespace ProgrammingClub.Services
@@ -19,7 +20,7 @@ namespace ProgrammingClub.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task CreateModerator(Moderator moderator)
+        public async Task CreateModerator(CreateModerator moderator)
         {
          
              //   Member? member = await _membersService.GetMemberById((Guid)moderator.IDMember);
