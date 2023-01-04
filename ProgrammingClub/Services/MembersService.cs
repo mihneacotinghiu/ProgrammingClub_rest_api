@@ -95,8 +95,12 @@ namespace ProgrammingClub.Services
             return await _context.Members.FirstOrDefaultAsync(m => m.IdMember == id);
         }
 
-        public async Task<bool> MemberExistByIdAsync(Guid id)
+        public async Task<bool> MemberExistByIdAsync(Guid? id)
         {
+            if (id == null)
+            {
+                return false;
+            }
             return await _context.Members.CountAsync(m => m.IdMember == id) > 0;
         }
 

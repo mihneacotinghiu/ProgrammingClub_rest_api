@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
+using ProgrammingClub.Models.CreateModerator;
 
 namespace CustomerPortal.API
 {
@@ -9,7 +10,7 @@ namespace CustomerPortal.API
         public MappingProfile()
         {
             CreateMap<Member, CreateMember>().ReverseMap();
-            CreateMap<Moderator, CreateMember>().ReverseMap();
+            CreateMap<Moderator, CreateModerator>().ReverseMap();
         }
     }
 }

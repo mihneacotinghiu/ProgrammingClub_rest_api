@@ -15,23 +15,27 @@ namespace ProgrammingClub.Services
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
         private readonly IMapper _mapper;
-        public ModeratorsService(ProgrammingClubDataContext context, IMapper mapper)
+        public ModeratorsService(
+            ProgrammingClubDataContext context, 
+            IMembersService membersService, 
+            IMapper mapper)
         {
             _context = context;
+            _membersService = membersService;
             _mapper = mapper;
         }
+
         public async Task CreateModerator(CreateModerator moderator)
         {
-         
-             //   Member? member = await _membersService.GetMemberById((Guid)moderator.IDMember);
-             //   if (member!= null)
-             //   {
-                    var newModerator = _mapper.Map<Moderator>(moderator);
-                    newModerator.IDModerator = Guid.NewGuid();
-                    _context.Entry(newModerator).State = EntityState.Added;
-                    await _context.SaveChangesAsync();
-              //  }
-        
+
+            if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
+            {
+                throw new NotImplementedException();
+            }
+            var newModerator = _mapper.Map<Moderator>(moderator);
+            newModerator.IDModerator = Guid.NewGuid();
+            _context.Entry(newModerator).State = EntityState.Added;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> DeleteModerator(Guid id)

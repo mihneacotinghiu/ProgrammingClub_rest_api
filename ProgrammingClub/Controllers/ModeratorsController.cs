@@ -40,7 +40,6 @@ namespace ProgrammingClub.Controllers
         [HttpGet]
         public async Task<IActionResult> GetModerators()
         {
-
             try
             {
                 var moderators = await _moderatorsService.GetModerators();
@@ -70,7 +69,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModerator([FromRoute] Guid IDModerator, [FromBody] Moderator moderator)
+        public async Task<IActionResult> PutModerator([FromRoute] Guid id, [FromBody] Moderator moderator)
         {
             try
             {
@@ -79,7 +78,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedModerator = await _moderatorsService.UpdateModerator(IDModerator, moderator);
+                var updatedModerator = await _moderatorsService.UpdateModerator(id, moderator);
                 if (updatedModerator == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
@@ -92,7 +91,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchModerator([FromRoute] Guid IDModerator, [FromBody] Moderator moderator)
+        public async Task<IActionResult> PatchModerator([FromRoute] Guid id, [FromBody] Moderator moderator)
         {
             try
             {
@@ -101,7 +100,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(IDModerator, moderator);
+                var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(id, moderator);
                 if (updatedModerator == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
