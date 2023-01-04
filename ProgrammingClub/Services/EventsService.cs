@@ -57,7 +57,7 @@ namespace ProgrammingClub.Services
                 eventFromDatabase.Description = events.Description;
             }
 
-            _context.Update(events);
+            _context.Update(eventFromDatabase);
             await _context.SaveChangesAsync();
             return eventFromDatabase;
 
