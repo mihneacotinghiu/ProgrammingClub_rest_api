@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
@@ -10,6 +11,7 @@ namespace ProgrammingClub.Services
     {
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
+        private readonly IMapper _mapper;
         public ModeratorsService(ProgrammingClubDataContext context)
         {
             _context = context;
