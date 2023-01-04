@@ -53,8 +53,8 @@ namespace ProgrammingClub.Controllers
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteModerator([FromQuery] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteModerator([FromRoute] Guid id)
         {
             try
             {
@@ -68,8 +68,8 @@ namespace ProgrammingClub.Controllers
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutModerator([FromQuery] Guid IDModerator, [FromBody] Moderator moderator)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutModerator([FromRoute] Guid IDModerator, [FromBody] Moderator moderator)
         {
             try
             {
@@ -79,6 +79,28 @@ namespace ProgrammingClub.Controllers
                 }
 
                 var updatedModerator = await _moderatorsService.UpdateModerator(IDModerator, moderator);
+                if (updatedModerator == null)
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                }
+
+                return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
+            }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchMember([FromRoute] Guid IDModerator, [FromRoute] Guid IDMember, [FromBody] Moderator moderator)
+        {
+            try
+            {
+                if (moderator == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest);
+                }
+
+                var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(IDModerator, IDMember, moderator);
                 if (updatedModerator == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);

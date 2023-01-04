@@ -22,9 +22,9 @@ namespace ProgrammingClub.Services
         public async Task CreateModerator(Moderator moderator)
         {
          
-               // Member? member = await _membersService.GetMemberById((Guid)moderator.IDMember);
-              //  if (member != null)
-               // {
+             //   Member? member = await _membersService.GetMemberById((Guid)moderator.IDMember);
+             //   if (member!= null)
+             //   {
                     var newModerator = _mapper.Map<Moderator>(moderator);
                     newModerator.IDModerator = Guid.NewGuid();
                     _context.Entry(newModerator).State = EntityState.Added;
