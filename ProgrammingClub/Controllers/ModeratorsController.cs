@@ -91,7 +91,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchMember([FromRoute] Guid IDModerator, [FromRoute] Guid IDMember, [FromBody] Moderator moderator)
+        public async Task<IActionResult> PatchModerator([FromRoute] Guid IDModerator, [FromBody] Moderator moderator)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(IDModerator, IDMember, moderator);
+                var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(IDModerator, moderator);
                 if (updatedModerator == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);

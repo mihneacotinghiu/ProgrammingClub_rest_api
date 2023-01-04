@@ -6,6 +6,7 @@ namespace ProgrammingClub.Models
     public class Moderator
     {
         [Key]
+        [JsonIgnore]
         public Guid? IDModerator { get; set; }
         [Required]
         public string? Title { get; set; }

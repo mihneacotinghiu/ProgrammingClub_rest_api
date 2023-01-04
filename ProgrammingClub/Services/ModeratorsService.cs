@@ -65,7 +65,7 @@ namespace ProgrammingClub.Services
             return moderator;
         }
 
-        public async Task<Moderator?> UpdatePartiallyModerator(Guid IDModerator, Guid IdMember, Moderator moderator)
+        public async Task<Moderator?> UpdatePartiallyModerator(Guid IDModerator, Moderator moderator)
         {
             var moderatorFromDatabase = await GetModeratorById(IDModerator);
             if (moderatorFromDatabase == null)
@@ -89,11 +89,6 @@ namespace ProgrammingClub.Services
         public async Task<bool> ModeratorExistByIdAsync(Guid id)
         {
             return await _context.Moderators.CountAsync(moderator => moderator.IDModerator == id) > 0;
-        }
-
-        public Task<Moderator?> UpdatePartiallyModerator(Guid idModerator, Moderator moderator)
-        {
-            throw new NotImplementedException();
         }
     }
 }
