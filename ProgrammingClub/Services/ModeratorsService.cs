@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.Metrics;
+using System.Net;
 using AutoMapper;
+using AutoMapper.Execution;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
-
+using Member = ProgrammingClub.Models.Member;
 
 namespace ProgrammingClub.Services
 {
@@ -12,22 +14,23 @@ namespace ProgrammingClub.Services
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
         private readonly IMapper _mapper;
-        public ModeratorsService(ProgrammingClubDataContext context)
+        public ModeratorsService(ProgrammingClubDataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task CreateModerator(Moderator moderator)
         {
-            moderator.IDModerator = Guid.NewGuid();
-            Moderator newModerator = new Moderator
-            {
-                IDModerator = Guid.NewGuid(),
-                Title = moderator.Title,
-                Description = moderator.Description,
-                IDMember= moderator.IDMember,
-            };
-            _context.Entry(newModerator).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+         
+               // Member? member = await _membersService.GetMemberById((Guid)moderator.IDMember);
+              //  if (member != null)
+               // {
+                    var newModerator = _mapper.Map<Moderator>(moderator);
+                    newModerator.IDModerator = Guid.NewGuid();
+                    _context.Entry(newModerator).State = EntityState.Added;
+                    await _context.SaveChangesAsync();
+              //  }
+        
         }
 
         public async Task<bool> DeleteModerator(Guid id)
@@ -69,12 +72,6 @@ namespace ProgrammingClub.Services
             {
                 return null;
             }
-            var memberFromDatabase = await _membersService.GetMemberById(IdMember);
-            if (memberFromDatabase == null)
-            {
-                return null;
-            }
-
             if (!string.IsNullOrEmpty(moderator.Title))
             {
                 moderatorFromDatabase.Title = moderator.Title;
@@ -91,7 +88,7 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> ModeratorExistByIdAsync(Guid id)
         {
-            return await _context.Moderators.CountAsync(m => m.IDModerator == id) > 0;
+            return await _context.Moderators.CountAsync(moderator => moderator.IDModerator == id) > 0;
         }
 
         public Task<Moderator?> UpdatePartiallyModerator(Guid idModerator, Moderator moderator)
