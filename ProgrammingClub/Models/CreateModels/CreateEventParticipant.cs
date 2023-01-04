@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace ProgrammingClub.Models.CreateModels;
 
-public class CreateEventParticipant
+public class CreateEventsParticipant
 {
     [Key]
     [JsonIgnore]

@@ -1,7 +1,10 @@
-﻿namespace ProgrammingClub.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProgrammingClub.Models
 {
-    public class EventParticipant
+    public class EventsParticipant
     {
+        [Key]
         public Guid? IdEventParticipant { get; set; }
         public Guid? IdEvent { get; set; }
         public Guid? IdMember { get; set; }

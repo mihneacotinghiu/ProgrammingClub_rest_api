@@ -41,7 +41,7 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                EventParticipant? eventParticipant = await _eventParticipantsService.GetEventParticipantById(participantId);
+                EventsParticipant? eventParticipant = await _eventParticipantsService.GetEventParticipantById(participantId);
                 if (eventParticipant != null)
                 {
                     return Ok(eventParticipant);
@@ -53,7 +53,7 @@ namespace ProgrammingClub.Controllers
 
         [Route("CreateEventParticipant")]
         [HttpPost]
-        public async Task<IActionResult> CreateEventParticipant([FromBody] CreateEventParticipant eventParticipant)
+        public async Task<IActionResult> CreateEventParticipant([FromBody] CreateEventsParticipant eventParticipant)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace ProgrammingClub.Controllers
 
         [Route("UpdateEventParticipant")]
         [HttpPut]
-        public async Task<IActionResult> UpdateEventParticipant([FromQuery]Guid idEventParticipant, [FromBody]EventParticipant eventParticipant)
+        public async Task<IActionResult> UpdateEventParticipant([FromQuery]Guid idEventParticipant, [FromBody]EventsParticipant eventParticipant)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace ProgrammingClub.Controllers
 
         [Route("UpdateEventParticipantPartially")]
         [HttpPatch]
-        public async Task<IActionResult> UpdateEventParticipantPartially([FromQuery]Guid idEventParticipant, [FromBody]EventParticipant eventParticipant)
+        public async Task<IActionResult> UpdateEventParticipantPartially([FromQuery]Guid idEventParticipant, [FromBody]EventsParticipant eventParticipant)
         {
             try
             {

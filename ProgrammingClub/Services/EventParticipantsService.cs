@@ -17,10 +17,10 @@ namespace ProgrammingClub.Services
             _membersService = membersService;
         }
 
-        public async Task<IEnumerable<EventParticipant>> GetAllMemberParticipations(Guid idMember)
+        public async Task<IEnumerable<EventsParticipant>> GetAllMemberParticipations(Guid idMember)
         {
             //returns list of all EventParticipant entries that have the given idMember
-            var participants = _context.EventParticipants.Where(e => e.IdMember == idMember);
+            var participants = _context.EventsParticipants.Where(e => e.IdMember == idMember);
             return await participants.ToListAsync();
         }
 
@@ -33,7 +33,7 @@ namespace ProgrammingClub.Services
         }
          */
 
-        public async Task CreateEventParticipant(CreateEventParticipant participant)
+        public async Task CreateEventParticipant(CreateEventsParticipant participant)
         {
             //add changes for event
             participant.IdEventParticipant = Guid.NewGuid();
@@ -45,7 +45,7 @@ namespace ProgrammingClub.Services
 
             //Check that a member does not already have a listing to an event. ONE TO ONE RELATIONSHIP.
             //Doesn't need to be done for event as doing it for member ensures it is safe - MAYBE????
-            List<EventParticipant> participants = (List<EventParticipant>)await GetAllMemberParticipations(participant.IdMember);
+            List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations(participant.IdMember);
             for (int i = 0; i< participants.Count; i++)
             {
                 if (participants[i].IdEvent == participant.IdEvent)
@@ -65,18 +65,18 @@ namespace ProgrammingClub.Services
             if (!await EventParticipantExists(idEventParticipant))
                 return false;
             
-            _context.EventParticipants.Remove(new EventParticipant { IdEventParticipant = idEventParticipant });
+            _context.EventsParticipants.Remove(new EventsParticipant { IdEventParticipant = idEventParticipant });
             await _context.SaveChangesAsync();
             return true;
 
         }
 
-        public async Task<IEnumerable<EventParticipant>> GetEventsParticipantsAsync()
+        public async Task<IEnumerable<EventsParticipant>> GetEventsParticipantsAsync()
         {
-            return _context.EventParticipants.ToList();
+            return _context.EventsParticipants.ToList();
         }
 
-        public async Task<EventParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventParticipant eventParticipant)
+        public async Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant)
         {
             if (!await EventParticipantExists(idEventParticipant))
             {
@@ -84,7 +84,7 @@ namespace ProgrammingClub.Services
             }
 
             eventParticipant.IdEventParticipant = idEventParticipant;
-            List<EventParticipant> participants = (List<EventParticipant>)await GetAllMemberParticipations((Guid)eventParticipant.IdMember);
+            List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations((Guid)eventParticipant.IdMember);
             for (int i = 0; i < participants.Count; i++)
             {
                 if (participants[i].IdEvent == eventParticipant.IdEvent)
@@ -99,7 +99,7 @@ namespace ProgrammingClub.Services
             return eventParticipant;
         }
 
-        public async Task<EventParticipant?> UpdateEventParticipantPartially(Guid idEventParticipant, EventParticipant participant)
+        public async Task<EventsParticipant?> UpdateEventParticipantPartially(Guid idEventParticipant, EventsParticipant participant)
         {
             var eventParticipantFromDb = await GetEventParticipantById(idEventParticipant);
             if (eventParticipantFromDb == null)
@@ -114,7 +114,7 @@ namespace ProgrammingClub.Services
 
             if (participant.IdMember != null)
             {
-                List<EventParticipant> participants = (List<EventParticipant>)await GetAllMemberParticipations((Guid)participant.IdMember);
+                List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations((Guid)participant.IdMember);
                 for (int i = 0; i < participants.Count; i++)
                 {
                     if (participants[i].IdEvent == participant.IdEvent)
@@ -163,14 +163,14 @@ namespace ProgrammingClub.Services
             return true;
         }
 
-        public async Task<EventParticipant?> GetEventParticipantById(Guid id)
+        public async Task<EventsParticipant?> GetEventParticipantById(Guid id)
         {
-            return await _context.EventParticipants.FirstOrDefaultAsync(e => e.IdEventParticipant == id);
+            return await _context.EventsParticipants.FirstOrDefaultAsync(e => e.IdEventParticipant == id);
         }
 
         public async Task<bool> EventParticipantExists(Guid id)
         {
-            return await _context.EventParticipants.CountAsync() > 0;
+            return await _context.EventsParticipants.CountAsync() > 0;
         }
     }
 }
