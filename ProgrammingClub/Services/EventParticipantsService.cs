@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
@@ -10,11 +11,16 @@ namespace ProgrammingClub.Services
     {
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
+        private readonly IMapper _mapper;
 
-        public EventParticipantsService(ProgrammingClubDataContext context, IMembersService membersService)
+        public EventParticipantsService(
+            ProgrammingClubDataContext context,
+            IMembersService membersService,
+            IMapper mapper)
         {
             _context = context;
             _membersService = membersService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<EventsParticipant>> GetAllMemberParticipations(Guid idMember)
@@ -35,28 +41,25 @@ namespace ProgrammingClub.Services
 
         public async Task CreateEventParticipant(CreateEventsParticipant participant)
         {
-            //add changes for event
-            participant.IdEventParticipant = Guid.NewGuid();
-            
             //verifying that a member with said ID exists
             if (!await _membersService.MemberExistByIdAsync(participant.IdMember))
-                throw new Exception();
-
+                throw new Exception("Member does not exist");
 
             //Check that a member does not already have a listing to an event. ONE TO ONE RELATIONSHIP.
             //Doesn't need to be done for event as doing it for member ensures it is safe - MAYBE????
-            List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations(participant.IdMember);
-            for (int i = 0; i< participants.Count; i++)
+            var participants = await GetAllMemberParticipations(participant.IdMember);
+            if (participants.Any(x => x.IdEvent == participant.IdEvent))
             {
-                if (participants[i].IdEvent == participant.IdEvent)
-                {
-                    throw new Exception();
-                }
+                throw new Exception("Already in the participant list");
             }
 
-            participant.Paid = false;
-            participant.Present = false;
-            _context.Entry(participant).State = EntityState.Added;
+            //add changes for event
+            var newEnetParticipant = _mapper.Map<EventsParticipant>(participant);
+            newEnetParticipant.IdEventParticipant = Guid.NewGuid();
+
+            //participant.Paid = false;
+            newEnetParticipant.Present = false;
+            _context.Entry(newEnetParticipant).State = EntityState.Added;
             await _context.SaveChangesAsync();
         }
 

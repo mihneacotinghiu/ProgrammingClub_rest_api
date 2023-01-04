@@ -8,7 +8,7 @@ using System.Diagnostics.Metrics;
 
 namespace ProgrammingClub.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class EventParticipantsController : ControllerBase
     {
@@ -19,7 +19,6 @@ namespace ProgrammingClub.Controllers
             _eventParticipantsService = eventParticipantsService;
         }
 
-        [Route("GetEventParticipants")]
         [HttpGet]
         public async Task<IActionResult> GetEventParticipants()
         {
@@ -35,9 +34,8 @@ namespace ProgrammingClub.Controllers
             catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
         }
 
-        [Route("GetEventParticipantByID")]
-        [HttpGet]
-        public async Task<IActionResult> GetEventParticipantByID([FromQuery] Guid participantId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEventParticipantByID([FromRoute] Guid participantId)
         {
             try
             {
@@ -51,7 +49,6 @@ namespace ProgrammingClub.Controllers
             catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
         }
 
-        [Route("CreateEventParticipant")]
         [HttpPost]
         public async Task<IActionResult> CreateEventParticipant([FromBody] CreateEventsParticipant eventParticipant)
         {
@@ -64,10 +61,12 @@ namespace ProgrammingClub.Controllers
                 }
                 return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
-            catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
+            catch(Exception ex)  
+            { 
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
-        [Route("DeleteEventParticipant")]
         [HttpDelete]
         public async Task<IActionResult> DeleteEventParticipant([FromQuery] Guid eventParticipantID)
         {
@@ -82,7 +81,6 @@ namespace ProgrammingClub.Controllers
             return StatusCode((int)HttpStatusCode.BadRequest, ErrorMessagesEnum.NoElementFound);
         }
 
-        [Route("UpdateEventParticipant")]
         [HttpPut]
         public async Task<IActionResult> UpdateEventParticipant([FromQuery]Guid idEventParticipant, [FromBody]EventsParticipant eventParticipant)
         {
@@ -102,7 +100,6 @@ namespace ProgrammingClub.Controllers
             catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
         }
 
-        [Route("UpdateEventParticipantPartially")]
         [HttpPatch]
         public async Task<IActionResult> UpdateEventParticipantPartially([FromQuery]Guid idEventParticipant, [FromBody]EventsParticipant eventParticipant)
         {
@@ -124,37 +121,35 @@ namespace ProgrammingClub.Controllers
             catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
         }
 
-        [Route("UpdateEventParticipantPaid")]
-        [HttpPatch]
-        public async Task<IActionResult> UpdateEventParticipantPaid([FromQuery] Guid idEventParticipant)
-        {
-            try
-            {
-                var result = await _eventParticipantsService.UpdateEventParticipantPaid(idEventParticipant);
-                if(result == false)
-                {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
-                }
-                return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
-            }
-            catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
-        }
+        //[HttpPatch]
+        //public async Task<IActionResult> UpdateEventParticipantPaid([FromQuery] Guid idEventParticipant)
+        //{
+        //    try
+        //    {
+        //        var result = await _eventParticipantsService.UpdateEventParticipantPaid(idEventParticipant);
+        //        if(result == false)
+        //        {
+        //            return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
+        //        }
+        //        return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
+        //    }
+        //    catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
+        //}
 
-        [Route("UpdateEventParticipantPresent")]
-        [HttpPatch]
-        public async Task<IActionResult> UpdateEventParticipantPresent([FromQuery] Guid idEventParticipant)
-        {
-            try
-            {
-                var result = await _eventParticipantsService.UpdateEventParticipantPresent(idEventParticipant);
-                if (result == false)
-                {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
-                }
-                return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
-            }
-            catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
-        }
+        //[HttpPatch]
+        //public async Task<IActionResult> UpdateEventParticipantPresent([FromQuery] Guid idEventParticipant)
+        //{
+        //    try
+        //    {
+        //        var result = await _eventParticipantsService.UpdateEventParticipantPresent(idEventParticipant);
+        //        if (result == false)
+        //        {
+        //            return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
+        //        }
+        //        return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
+        //    }
+        //    catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
+        //}
 
     }
 }
