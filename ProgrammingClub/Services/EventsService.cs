@@ -65,7 +65,7 @@ namespace ProgrammingClub.Services
 
         public async Task<Event?> UpdateEvent(Guid id, Event events)
         {
-            if(! await EventExistById(id)) 
+            if(!await EventExistById(id)) 
                 return null;
 
             events.IdEvent = id;
