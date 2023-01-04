@@ -1,0 +1,16 @@
+﻿using ProgrammingClub.Models.CreateModels;
+using ProgrammingClub.Models;
+
+namespace ProgrammingClub.Services
+{
+    public interface IModeratorService
+    {
+        public Task<IEnumerable<Moderator>> GetModerators();
+        public Task CreateModerator(Moderator moderator);
+        public Task<bool> DeleteModerator(Guid id);
+        public Task<Moderator?> UpdateModerator(Guid idModerator, Moderator moderator);
+        public Task<Moderator?> UpdatePartiallyModerator(Guid idModerator, Guid IdMember, Moderator moderator);
+
+        public Task<Moderator?> GetModeratorById(Guid id);
+    }
+}
