@@ -12,6 +12,5 @@ namespace ProgrammingClub.Services
         public Task<Announcement?> UpdatePartiallyAnnouncementAsync(Guid id, Announcement announcement);
         public Task<bool> DeleteAnnouncementAsync(Guid id);
         public Task<Announcement?> GetAnnounctmentByIdAsync(Guid id);
-        public Task AnnouncementIsValid(Announcement announcement);
     }
 }

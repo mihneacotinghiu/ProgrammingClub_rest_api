@@ -13,10 +13,5 @@ namespace ProgrammingClub.Services
         public Task<CodeSnippet?> UpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet);
         public Task<CodeSnippet?> PartiallyUpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet);
         public Task<bool> CodeSnippetExistByIdAsync(Guid? id);
-        public Task CodeSnippetIsValid(CodeSnippet codeSnippet);
-        public Task CheckCodeSnippetExistance(Guid? id);
-        public Task CheckMemberExistance(Guid? id);
-
-
     }
 }

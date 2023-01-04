@@ -32,7 +32,7 @@ namespace ProgrammingClub.Services
 
         public async Task<IEnumerable<Member>> GetMembers()
         {
-            return _context.Members.ToList();
+            return await _context.Members.ToListAsync();
         }
         public async Task CreateMember(CreateMember member)
         {
@@ -97,7 +97,11 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> MemberExistByIdAsync(Guid? id)
         {
-            return await _context.Members.CountAsync(m => m.IdMember == id) > 0;
+            if (!id.HasValue)
+            {
+                return false;
+            }
+            return await _context.Members.AnyAsync(m => m.IdMember == id);
         }
 
     }

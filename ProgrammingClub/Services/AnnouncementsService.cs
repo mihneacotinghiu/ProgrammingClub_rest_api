@@ -17,11 +17,11 @@ namespace ProgrammingClub.Services
             _mapper = mapper;
         }
 
-
         public async Task CreateAnnouncementAsync(CreateAnnouncement announcement)
         {
+            Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
+
             var newAnnouncement = _mapper.Map<Announcement>(announcement);
-            await AnnouncementIsValid(newAnnouncement);
             newAnnouncement.IdAnnouncement = Guid.NewGuid();
             _context.Entry(newAnnouncement).State = EntityState.Added;
             await _context.SaveChangesAsync();
@@ -38,7 +38,7 @@ namespace ProgrammingClub.Services
 
         public async Task<IEnumerable<Announcement>> GetAnnouncementsAsync()
         {
-            return _context.Announcements.ToList();
+            return await _context.Announcements.ToListAsync();
         }
 
         public async Task<Announcement?> GetAnnounctmentByIdAsync(Guid id)
@@ -53,9 +53,9 @@ namespace ProgrammingClub.Services
 
         public async Task<Announcement?> UpdateAnnouncementAsync(Guid id , Announcement announcement)
         {
+            Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
+            
             if (!await ExistAnnounctmenAsync(id)) { return null; }
-
-            await AnnouncementIsValid(announcement);
 
             announcement.IdAnnouncement = id;
             _context.Update(announcement);
@@ -65,30 +65,21 @@ namespace ProgrammingClub.Services
 
         public async Task<Announcement?> UpdatePartiallyAnnouncementAsync(Guid id, Announcement announcement)
         {
-            if (!await ExistAnnounctmenAsync(id)) { return null; }
+            Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
 
             var announcementFromDatabase = await GetAnnounctmentByIdAsync(id);
             if (announcementFromDatabase == null) { return null; }
 
             if (announcement.Tags != null) { announcementFromDatabase.Tags = announcement.Tags; }
-            if (announcement.ValidFrom != null) { announcementFromDatabase.ValidFrom = announcement.ValidFrom; }
-            if (announcement.ValidTo != null) { announcementFromDatabase.ValidTo = announcement.ValidTo; }
+            if (announcement.ValidFrom.HasValue) { announcementFromDatabase.ValidFrom = announcement.ValidFrom; }
+            if (announcement.ValidTo.HasValue) { announcementFromDatabase.ValidTo = announcement.ValidTo; }
             if (announcement.Text != null) { announcementFromDatabase.Text = announcement.Text; }
             if (announcement.Title != null) { announcementFromDatabase.Title = announcement.Title; }
-            if (announcement.EventDate != null) { announcementFromDatabase.EventDate= announcement.EventDate; }
+            if (announcement.EventDate.HasValue) { announcementFromDatabase.EventDate= announcement.EventDate; }
 
-            await AnnouncementIsValid(announcementFromDatabase);
             _context.Update(announcementFromDatabase);
             await _context.SaveChangesAsync();
             return announcementFromDatabase;
-
-        }
-
-        public async Task AnnouncementIsValid(Announcement announcement)
-        {
-            var validDates = Helpers.ValidationFunctions.TwoDatesValidator(announcement.ValidFrom, announcement.ValidTo);
-
-            await Task.WhenAll(validDates);
         }
     }
 }

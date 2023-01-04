@@ -2,9 +2,9 @@
 {
     public class ValidationFunctions
     {
-        public static async Task TwoDatesValidator(DateTime? FirstDate, DateTime? SecondDate)
+        public static void TrowExceptionWhenDateIsNotValid(DateTime? startDate, DateTime? endDate)
         {
-            if(FirstDate!= null && SecondDate != null && FirstDate > SecondDate)
+            if(startDate.HasValue && endDate.HasValue && startDate > endDate)
             {
                 throw new IOException(Helpers.ErrorMessegesEnum.StartEndDatesError);
             }

@@ -9,7 +9,6 @@ namespace ProgrammingClub.Services
 {
     public class CodeSnippetsService : ICodeSnippetsService
     {
-
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
         private readonly IMapper _mapper;
@@ -22,16 +21,13 @@ namespace ProgrammingClub.Services
 
         public async Task CreateCodeSnippetAsync(CreateCodeSnippet codeSnippet)
         {
-            
-
             var newCodeSnippet = _mapper.Map<CodeSnippet>(codeSnippet);
 
-            await CodeSnippetIsValid(newCodeSnippet);
+            await ValidateCodeSnippet(newCodeSnippet);
 
             newCodeSnippet.IdCodeSnippet = Guid.NewGuid();
-            _context.Entry(newCodeSnippet).State= EntityState.Added;
+            _context.Entry(newCodeSnippet).State = EntityState.Added;
             await _context.SaveChangesAsync();
-
         }
 
         public async Task<bool> DeleteCodeSnippetAsync(Guid id)
@@ -41,12 +37,11 @@ namespace ProgrammingClub.Services
             _context.CodeSnippets.Remove(new CodeSnippet { IdCodeSnippet = id });
             await _context.SaveChangesAsync();
             return true;
-
         }
 
         public async Task<IEnumerable<CodeSnippet>> GetCodeSnippetsAsync()
         {
-            return _context.CodeSnippets.ToList();
+            return await _context.CodeSnippets.ToListAsync();
         }
 
         public async Task<CodeSnippet?> GetCodeSnippetByIdAsync(Guid id)
@@ -56,7 +51,8 @@ namespace ProgrammingClub.Services
 
         public async Task<CodeSnippet?> PartiallyUpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet)
         {
-            await CodeSnippetIsValid(codeSnippet);
+            codeSnippet.IdCodeSnippet = id;
+            await ValidateCodeSnippet(codeSnippet);
 
             var CodeSnippetFromDatabase = await GetCodeSnippetByIdAsync(id);
             if(CodeSnippetFromDatabase == null) { return null; }
@@ -78,7 +74,7 @@ namespace ProgrammingClub.Services
         {
             if(! await CodeSnippetExistByIdAsync(id)) { return null; }
 
-            await CodeSnippetIsValid(codeSnippet);
+            await ValidateCodeSnippet(codeSnippet);
 
             codeSnippet.IdCodeSnippet= id;
             _context.CodeSnippets.Update(codeSnippet);   
@@ -88,38 +84,29 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> CodeSnippetExistByIdAsync(Guid? id)
         {
-            return await _context.CodeSnippets.CountAsync(c => c.IdCodeSnippet == id) > 0;
-        }
-
-        public async Task CodeSnippetIsValid(CodeSnippet codeSnippet)
-        {
-
-            var validPreviusCodeSnippetId = CheckCodeSnippetExistance(codeSnippet.IdSnippetPreviousVersion);
-            var validMemberId = CheckMemberExistance(codeSnippet.IdMember);
-
-            await Task.WhenAll(validPreviusCodeSnippetId, validMemberId);
-
-
-        }
-
-
-        public async Task CheckCodeSnippetExistance(Guid? id) 
-        {
-            if (id != null && !await CodeSnippetExistByIdAsync(id))
+            if (!id.HasValue)
             {
-                throw new IOException(Helpers.ErrorMessegesEnum.NoCodeSnippetFound);
+                return false;
+            }    
+            return await _context.CodeSnippets.AnyAsync(c => c.IdCodeSnippet == id);
+        }
+
+        private async Task ValidateCodeSnippet(CodeSnippet codeSnippet)
+        {
+            Guid? idCS = codeSnippet.IdSnippetPreviousVersion;
+            Guid? idMember = codeSnippet.IdMember;
+            var codeSnippetExistTask = CodeSnippetExistByIdAsync(idCS);
+            var memberExistTask = _membersService.MemberExistByIdAsync(idMember);
+            await Task.WhenAll(codeSnippetExistTask, memberExistTask);
+
+            if (!idCS.HasValue || codeSnippetExistTask.Result)
+            {
+                throw new NotImplementedException();
+            }
+            if (memberExistTask.Result)
+            {
+                throw new NotImplementedException();
             }
         }
-
-        public async Task CheckMemberExistance(Guid? id)
-        {
-      
-            if(id != null && !await _membersService.MemberExistByIdAsync(id))
-            {
-                throw new IOException(Helpers.ErrorMessegesEnum.NoMemberFound);
-            }
-        
-        }
-
     }
 }
