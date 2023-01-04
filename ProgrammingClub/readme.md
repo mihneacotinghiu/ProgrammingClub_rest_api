@@ -3,4 +3,3 @@ Savin Iustinian-Pavel
 Florin Cioban
 Andrei Cuibus
 Marius Mircea
-Georgiana Istrate
