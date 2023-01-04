@@ -54,7 +54,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteModerator([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteModerator([FromQuery] Guid id)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutModerator([FromRoute] Guid IDModerator, [FromBody] Moderator moderator)
+        public async Task<IActionResult> PutModerator([FromQuery] Guid IDModerator, [FromBody] Moderator moderator)
         {
             try
             {
