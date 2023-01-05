@@ -10,7 +10,7 @@ namespace ProgrammingClub.Models.CreateModels
         [JsonIgnore]
         public Guid IdMember { get; set; }
 
-        [StringLength(250, MinimumLength = 3, ErrorMessage = ErrorMessagesEnum.IncorectSize)]
+        [StringLength(250, MinimumLength = 3)]
         [Required]
         public string Name { get; set; }
 

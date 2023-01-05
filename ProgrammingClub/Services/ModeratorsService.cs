@@ -30,7 +30,7 @@ namespace ProgrammingClub.Services
 
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new NotImplementedException("Invalid Member ID! ");
+                throw new Exception("Member id not found! ");
             }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
@@ -41,7 +41,7 @@ namespace ProgrammingClub.Services
         public async Task<bool> DeleteModerator(Guid id)
         {
             if (!await ModeratorExistByIdAsync(id))
-                throw new NotImplementedException("Invalid Moderator ID! ");
+                return false;
 
             _context.Moderators.Remove(new Moderator { IDModerator = id });
             await _context.SaveChangesAsync();
@@ -60,14 +60,27 @@ namespace ProgrammingClub.Services
 
         public async Task<Moderator?> UpdateModerator(Guid IDModerator, Moderator moderator)
         {
-            if (!await ModeratorExistByIdAsync(IDModerator))
-            {
-                throw new NotImplementedException("Invalid Moderator ID! ");
-            }
+            await ValidateModerator(IDModerator, moderator);
             moderator.IDModerator = IDModerator;
             _context.Update(moderator);
             await _context.SaveChangesAsync();
             return moderator;
+        }
+
+        private async Task ValidateModerator(Guid IDModerator, Moderator moderator)
+        {
+            if (!await ModeratorExistByIdAsync(IDModerator))
+            {
+                throw new Exception("IDModerator not found! ");
+            }
+            if (moderator.Description == null)
+            {
+                throw new Exception("Description cannot be null! ");
+            }
+            if (moderator.Title == null)
+            {
+                throw new Exception("Title cannot be null! ");
+            }
         }
 
         public async Task<Moderator?> UpdatePartiallyModerator(Guid IDModerator, Moderator moderator)
@@ -75,7 +88,7 @@ namespace ProgrammingClub.Services
             var moderatorFromDatabase = await GetModeratorById(IDModerator);
             if (moderatorFromDatabase == null)
             {
-                throw new NotImplementedException("Invalid Moderator ID! ");
+                return null;
             }
             if (!string.IsNullOrEmpty(moderator.Title))
             {
@@ -85,10 +98,7 @@ namespace ProgrammingClub.Services
             {
                 moderatorFromDatabase.Description = moderator.Description;
             }
-            if (moderator.Description==null || moderator.Title == null)
-            {
-                throw new NotImplementedException("Description and Title cannot be null! ");
-            }
+
             _context.Update(moderator);
             await _context.SaveChangesAsync();
             return moderatorFromDatabase;

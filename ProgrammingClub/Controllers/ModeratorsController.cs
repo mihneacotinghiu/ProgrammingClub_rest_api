@@ -45,7 +45,7 @@ namespace ProgrammingClub.Controllers
                 var moderators = await _moderatorsService.GetModerators();
                 if (moderators == null || !moderators.Any())
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(moderators);
@@ -81,7 +81,7 @@ namespace ProgrammingClub.Controllers
                 var updatedModerator = await _moderatorsService.UpdateModerator(id, moderator);
                 if (updatedModerator == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -103,7 +103,7 @@ namespace ProgrammingClub.Controllers
                 var updatedModerator = await _moderatorsService.UpdatePartiallyModerator(id, moderator);
                 if (updatedModerator == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
