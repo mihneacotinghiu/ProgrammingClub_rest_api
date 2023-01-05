@@ -30,7 +30,7 @@ namespace ProgrammingClub.Services
 
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw  KeyNotFoundException;
+                throw new NotImplementedException("Invalid Member ID! ");
             }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
@@ -64,6 +64,7 @@ namespace ProgrammingClub.Services
             {
                 throw new NotImplementedException("Invalid Moderator ID! ");
             }
+
             moderator.IDModerator = IDModerator;
             _context.Update(moderator);
             await _context.SaveChangesAsync();
