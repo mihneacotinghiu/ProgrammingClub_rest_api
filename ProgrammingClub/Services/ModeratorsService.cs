@@ -30,7 +30,7 @@ namespace ProgrammingClub.Services
 
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Invalid Member ID! ");
             }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
@@ -41,7 +41,7 @@ namespace ProgrammingClub.Services
         public async Task<bool> DeleteModerator(Guid id)
         {
             if (!await ModeratorExistByIdAsync(id))
-                return false;
+                throw new NotImplementedException("Invalid Moderator ID! ");
 
             _context.Moderators.Remove(new Moderator { IDModerator = id });
             await _context.SaveChangesAsync();
@@ -62,7 +62,7 @@ namespace ProgrammingClub.Services
         {
             if (!await ModeratorExistByIdAsync(IDModerator))
             {
-                return null;
+                throw new NotImplementedException("Invalid Moderator ID! ");
             }
             moderator.IDModerator = IDModerator;
             _context.Update(moderator);
@@ -75,7 +75,7 @@ namespace ProgrammingClub.Services
             var moderatorFromDatabase = await GetModeratorById(IDModerator);
             if (moderatorFromDatabase == null)
             {
-                return null;
+                throw new NotImplementedException("Invalid Moderator ID! ");
             }
             if (!string.IsNullOrEmpty(moderator.Title))
             {
