@@ -64,7 +64,6 @@ namespace ProgrammingClub.Services
             {
                 throw new NotImplementedException("Invalid Moderator ID! ");
             }
-
             moderator.IDModerator = IDModerator;
             _context.Update(moderator);
             await _context.SaveChangesAsync();
