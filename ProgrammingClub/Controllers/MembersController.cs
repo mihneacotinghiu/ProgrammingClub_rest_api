@@ -84,7 +84,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMember([FromRoute] Guid idMember,[FromBody] Member member)
+        public async Task<IActionResult> PutMember([FromRoute] Guid id,[FromBody] Member member)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
                 
-                var updatedMember = await _membersService.UpdateMember(idMember, member);
+                var updatedMember = await _membersService.UpdateMember(id, member);
                 if (updatedMember == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
@@ -106,7 +106,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchMember([FromRoute]Guid idMember, [FromBody] Member member)
+        public async Task<IActionResult> PatchMember([FromRoute]Guid id, [FromBody] Member member)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedMember = await _membersService.UpdatePartiallyMember(idMember, member);
+                var updatedMember = await _membersService.UpdatePartiallyMember(id, member);
                 if (updatedMember == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
