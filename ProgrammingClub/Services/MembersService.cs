@@ -82,7 +82,7 @@ namespace ProgrammingClub.Services
         {
             if (!await MemberExistByIdAsync(idMember))
             {
-                return null;
+                throw new NotImplementedException("Invalid Member ID! ");
             }
             member.IdMember = idMember;
             _context.Update(member);

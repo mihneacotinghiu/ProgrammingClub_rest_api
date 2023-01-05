@@ -16,8 +16,8 @@ namespace ProgrammingClub.Services
         private readonly IMembersService _membersService;
         private readonly IMapper _mapper;
         public ModeratorsService(
-            ProgrammingClubDataContext context, 
-            IMembersService membersService, 
+            ProgrammingClubDataContext context,
+            IMembersService membersService,
             IMapper mapper)
         {
             _context = context;
@@ -30,7 +30,7 @@ namespace ProgrammingClub.Services
 
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new NotImplementedException("Invalid Member ID! ");
+                throw  KeyNotFoundException;
             }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
@@ -85,7 +85,10 @@ namespace ProgrammingClub.Services
             {
                 moderatorFromDatabase.Description = moderator.Description;
             }
-
+            if (moderator.Description==null || moderator.Title == null)
+            {
+                throw new NotImplementedException("Description and Title cannot be null! ");
+            }
             _context.Update(moderator);
             await _context.SaveChangesAsync();
             return moderatorFromDatabase;
