@@ -29,7 +29,7 @@ namespace ProgrammingClub.Controllers
                 if (codeSnippets != null && codeSnippets.ToList().Count > 0)
                     return Ok(codeSnippets);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
 
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
@@ -44,7 +44,7 @@ namespace ProgrammingClub.Controllers
             {
                 CodeSnippet? codeSnippet = await _codeSnippetsService.GetCodeSnippetByid(id);
                 if (codeSnippet == null)
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 return Ok(codeSnippet);
                
             }
