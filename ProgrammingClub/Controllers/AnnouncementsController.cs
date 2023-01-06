@@ -29,7 +29,7 @@ namespace ProgrammingClub.Controllers
                 if (announcements != null && announcements.ToList().Count > 0)
                     return Ok(announcements);
 
-                return StatusCode((int)HttpStatusCode.NoContent,ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent,ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) {return StatusCode((int)HttpStatusCode.InternalServerError, ex);}
             
@@ -48,7 +48,7 @@ namespace ProgrammingClub.Controllers
                 if (announcment != null)
                     return Ok(announcment);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
 

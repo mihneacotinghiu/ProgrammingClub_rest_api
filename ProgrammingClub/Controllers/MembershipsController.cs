@@ -30,7 +30,7 @@ namespace ProgrammingClub.Controllers
                 if (memberships != null && memberships.ToList().Count > 0)
                     return Ok(memberships);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
 
@@ -57,7 +57,7 @@ namespace ProgrammingClub.Controllers
                
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
-            return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+            return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
 
         }
 

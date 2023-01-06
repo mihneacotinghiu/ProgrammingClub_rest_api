@@ -9,7 +9,7 @@ using System.Net.WebSockets;
 
 namespace ProgrammingClub.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MembersController : ControllerBase
     {
@@ -20,17 +20,15 @@ namespace ProgrammingClub.Controllers
             _membersService = membersService;
         }
 
-        [Route("GetMembers")]
         [HttpGet]
         public async Task<IActionResult> GetMembers()
         {
-         
             try
             {
                 var members = await _membersService.GetMembers();
                 if (members == null || !members.Any())
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(members);
@@ -38,9 +36,8 @@ namespace ProgrammingClub.Controllers
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 
-        [Route("GetMemberById")]
-        [HttpGet]
-        public async Task<IActionResult> GetMemberById([FromQuery] Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMemberById([FromRoute] Guid id)
         {
 
             try
@@ -49,12 +46,11 @@ namespace ProgrammingClub.Controllers
                 if (member != null)
                     return Ok(member);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 
-        [Route("PostMember")]
         [HttpPost]
         public async Task<IActionResult> PostMember([FromBody] CreateMember member)
         {
@@ -70,9 +66,8 @@ namespace ProgrammingClub.Controllers
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
-        [Route("DeleteMember")]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteMember([FromQuery] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMember([FromRoute] Guid id)
         {
 
 
@@ -88,9 +83,8 @@ namespace ProgrammingClub.Controllers
 
         }
 
-        [Route("PutMember")]
-        [HttpPut]
-        public async Task<IActionResult> PutMember(Guid idMember,[FromBody] Member member)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMember([FromRoute] Guid id,[FromBody] Member member)
         {
             try
             {
@@ -99,10 +93,10 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
                 
-                var updatedMember = await _membersService.UpdateMember(idMember, member);
+                var updatedMember = await _membersService.UpdateMember(id, member);
                 if (updatedMember == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -111,9 +105,8 @@ namespace ProgrammingClub.Controllers
            
         }
 
-        [Route("PatchMember")]
-        [HttpPatch]
-        public async Task<IActionResult> PatchMember(Guid idMember, [FromBody] Member member)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchMember([FromRoute]Guid id, [FromBody] Member member)
         {
             try
             {
@@ -122,10 +115,10 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedMember = await _membersService.UpdatePartiallyMember(idMember, member);
+                var updatedMember = await _membersService.UpdatePartiallyMember(id, member);
                 if (updatedMember == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
