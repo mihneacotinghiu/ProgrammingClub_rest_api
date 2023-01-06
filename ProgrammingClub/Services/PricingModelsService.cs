@@ -13,7 +13,6 @@ namespace ProgrammingClub.Services
             _context = context;
         }
 
-
         public async Task CreatePricingModelsAsync(PricingModels pricingModels)
         {
             if (pricingModels == null)
@@ -26,10 +25,9 @@ namespace ProgrammingClub.Services
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<bool> DeletePricingModelsAsync(Guid id)
         {
-            PricingModels? pricingModels = await GetPricingModelsByIdAsync(id);
+            PricingModels? pricingModels = await GetPricingModelByIdAsync(id);
             if (pricingModels == null)
                 return false;
             _context.PricingModels.Remove(pricingModels);
@@ -37,12 +35,12 @@ namespace ProgrammingClub.Services
             return true;
         }
 
-        public async Task<DbSet<PricingModels>> GetPricingModelsAsync()
+        public async Task<IEnumerable<PricingModels>> GetPricingModelsAsync()
         {
-            return _context.PricingModels;
+            return await _context.PricingModels.ToListAsync();
         }
 
-        public async  Task<PricingModels?> GetPricingModelsByIdAsync(Guid id)
+        public async  Task<PricingModels?> GetPricingModelByIdAsync(Guid id)
         {
             return await _context.PricingModels.FirstOrDefaultAsync(p => p.IdPricingModels == id);
         }
@@ -50,7 +48,7 @@ namespace ProgrammingClub.Services
 
         public async Task<PricingModels?> UpdatePricingModelsAsync(Guid id, PricingModels pricingModels)
         {
-            if (GetPricingModelsByIdAsync(id) == null)
+            if (GetPricingModelByIdAsync(id) == null)
                 return null;
             _context.Update(pricingModels);
             await _context.SaveChangesAsync();
@@ -59,7 +57,7 @@ namespace ProgrammingClub.Services
 
         public async Task<PricingModels?> UpdatePricingModelsPartiallyAsync(Guid id, PricingModels pricingModels)
         {
-            var pricingModelsFromDatabase = await GetPricingModelsByIdAsync(id);
+            var pricingModelsFromDatabase = await GetPricingModelByIdAsync(id);
 
             if (pricingModelsFromDatabase == null)
             {
@@ -86,6 +84,9 @@ namespace ProgrammingClub.Services
             return pricingModelsFromDatabase;
         }
 
-      
+        public async Task<bool> PricingModelExistByIdAsync(Guid id)
+        {
+            return await _context.PricingModels.AnyAsync(p => p.IdPricingModels == id);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                DbSet<PricingModels> pricingModels = await _pricingModelsService.GetPricingModelsAsync();
+                var pricingModels = await _pricingModelsService.GetPricingModelsAsync();
                 if (pricingModels != null && pricingModels.ToList().Count > 0)
                     return Ok(pricingModels);
 
@@ -37,7 +37,7 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                PricingModels? pricingModels = await _pricingModelsService.GetPricingModelsByIdAsync(id);
+                PricingModels? pricingModels = await _pricingModelsService.GetPricingModelByIdAsync(id);
 
                 if (pricingModels != null)
 

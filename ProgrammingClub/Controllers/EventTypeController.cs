@@ -14,7 +14,7 @@ namespace ProgrammingClub.Controllers
     {
         private readonly IEventTypeService _eventTypeService;
 
-        public EventTypeController( IEventTypeService eventType)
+        public EventTypeController(IEventTypeService eventType)
         {
             _eventTypeService = eventType;
         }
@@ -24,8 +24,8 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                DbSet<EventType> eventType = await _eventTypeService.GetEventTypesAsync();
-                if (eventType != null && eventType.ToList().Count > 0)
+                var eventType = await _eventTypeService.GetEventTypesAsync();
+                if (eventType != null && eventType.Count() > 0)
                     return Ok(eventType);
 
                 return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
@@ -36,7 +36,7 @@ namespace ProgrammingClub.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<IActionResult> GetEventTypeById(Guid id)
+        public async Task<IActionResult> GetEventTypeById([FromRoute] Guid id)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostEventType([FromBody] EventType eventType)
+        public async Task<IActionResult> PostEventType([FromBody] CreateEventType eventType)
         {
             try
             {
@@ -72,8 +72,8 @@ namespace ProgrammingClub.Controllers
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteMember([FromQuery] Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMember([FromRoute] Guid id)
         {
 
 
@@ -89,8 +89,8 @@ namespace ProgrammingClub.Controllers
 
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutMember(Guid idEventType, [FromBody] EventType eventType)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutMember([FromRoute] Guid id, [FromBody] EventType eventType)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedEventType = await _eventTypeService.UpdateEventTypeAsync(idEventType, eventType);
+                var updatedEventType = await _eventTypeService.UpdateEventTypeAsync(id, eventType);
                 if (updatedEventType == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
@@ -111,8 +111,8 @@ namespace ProgrammingClub.Controllers
 
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> PatchEventType(Guid idEventType, [FromBody] EventType eventType)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchEventType([FromRoute] Guid id, [FromBody] EventType eventType)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedEventType = await _eventTypeService.UpdateEventTypePartiallyAsync(idEventType, eventType);
+                var updatedEventType = await _eventTypeService.UpdateEventTypePartiallyAsync(id, eventType);
                 if (updatedEventType == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
@@ -130,9 +130,6 @@ namespace ProgrammingClub.Controllers
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
-
         }
-
-
     }
 }

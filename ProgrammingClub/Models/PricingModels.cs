@@ -8,6 +8,6 @@ namespace ProgrammingClub.Models
         public Guid? IdPricingModels { get; set; }
         public string? Name { get; set; }
         public float? Price { get; set; }
-        public DateOnly? ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 }
