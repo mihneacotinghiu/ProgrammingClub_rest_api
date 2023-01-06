@@ -35,11 +35,11 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEventParticipantByID([FromRoute] Guid participantId)
+        public async Task<IActionResult> GetEventParticipantByID([FromRoute] Guid id)
         {
             try
             {
-                EventsParticipant? eventParticipant = await _eventParticipantsService.GetEventParticipantById(participantId);
+                EventsParticipant? eventParticipant = await _eventParticipantsService.GetEventParticipantById(id);
                 if (eventParticipant != null)
                 {
                     return Ok(eventParticipant);

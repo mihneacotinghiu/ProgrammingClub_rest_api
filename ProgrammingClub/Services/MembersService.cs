@@ -32,7 +32,7 @@ namespace ProgrammingClub.Services
 
         public async Task<IEnumerable<Member>> GetMembers()
         {
-            return _context.Members.ToList();
+            return await _context.Members.ToListAsync();
         }
         public async Task CreateMember(CreateMember member)
         {
