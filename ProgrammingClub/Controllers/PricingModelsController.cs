@@ -26,7 +26,7 @@ namespace ProgrammingClub.Controllers
                 if (pricingModels != null && pricingModels.ToList().Count > 0)
                     return Ok(pricingModels);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
@@ -96,7 +96,7 @@ namespace ProgrammingClub.Controllers
                 var updatedPricingModels = await _pricingModelsService.UpdatePricingModelsAsync(idPricingModels, pricingModels);
                 if (updatedPricingModels == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -118,7 +118,7 @@ namespace ProgrammingClub.Controllers
                 var updatedPricingModels= await _pricingModelsService.UpdatePricingModelsPartiallyAsync(idPricingModels, pricingModels);
                 if (updatedPricingModels == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);

@@ -28,7 +28,7 @@ namespace ProgrammingClub.Controllers
                 if (eventType != null && eventType.ToList().Count > 0)
                     return Ok(eventType);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
 
@@ -102,7 +102,7 @@ namespace ProgrammingClub.Controllers
                 var updatedEventType = await _eventTypeService.UpdateEventTypeAsync(idEventType, eventType);
                 if (updatedEventType == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -124,7 +124,7 @@ namespace ProgrammingClub.Controllers
                 var updatedEventType = await _eventTypeService.UpdateEventTypePartiallyAsync(idEventType, eventType);
                 if (updatedEventType == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
