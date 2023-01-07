@@ -27,7 +27,7 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> DeleteEvent(Guid id)
         {
-            if(!await EventExistById(id)) 
+            if(!await EventExistByIdAsync(id)) 
                 return false;
 
             _context.Events.Remove(new Event { IdEvent = id });
@@ -65,7 +65,7 @@ namespace ProgrammingClub.Services
 
         public async Task<Event?> UpdateEvent(Guid id, Event events)
         {
-            if(!await EventExistById(id)) 
+            if(!await EventExistByIdAsync(id)) 
                 return null;
 
             events.IdEvent = id;
@@ -79,7 +79,7 @@ namespace ProgrammingClub.Services
             return await _context.Events.FirstOrDefaultAsync(e => e.IdEvent == id);
         }
 
-        public async Task<bool> EventExistById(Guid id)
+        public async Task<bool> EventExistByIdAsync(Guid? id)
         {
             return await _context.Events.CountAsync(e => e.IdEvent == id) > 0;
         }

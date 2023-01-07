@@ -22,6 +22,7 @@ builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>()
 builder.Services.AddTransient<IModeratorService, ModeratorsService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IEventsService, EventsService>();
+builder.Services.AddTransient<IDropoutsService, DropoutsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
