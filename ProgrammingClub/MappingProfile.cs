@@ -12,6 +12,7 @@ namespace CustomerPortal.API
             CreateMap<Member, CreateMember>().ReverseMap();
             CreateMap<Moderator, CreateModerator>().ReverseMap();
             CreateMap<Event, CreateEvent>().ReverseMap();
+            CreateMap<Dropout, CreateDropout>().ReverseMap();
         }
     }
 }

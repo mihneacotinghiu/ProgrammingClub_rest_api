@@ -4,6 +4,7 @@ using ProgrammingClub.Models.CreateModerator;
 using ProgrammingClub.Models;
 using ProgrammingClub.Services;
 using System.Net;
+using ProgrammingClub.Models.CreateModels;
 
 namespace ProgrammingClub.Controllers
 {
@@ -20,7 +21,7 @@ namespace ProgrammingClub.Controllers
 
 
             [HttpPost]
-            public async Task<IActionResult> PostDropout([FromBody] Dropout dropout)
+            public async Task<IActionResult> PostDropout([FromBody] CreateDropout dropout)
             {
                 try
                 {

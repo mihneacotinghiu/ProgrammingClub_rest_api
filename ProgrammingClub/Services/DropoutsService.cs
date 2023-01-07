@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
+using ProgrammingClub.Models.CreateModels;
 
 namespace ProgrammingClub.Services
 {
@@ -20,16 +21,16 @@ namespace ProgrammingClub.Services
             _eventsService = eventsService;
             _mapper = mapper;
         }
-        public async Task CreateDropout(Dropout dropout)
+        public async Task CreateDropout(CreateDropout dropout)
         {
             if (!await _eventsService.EventExistByIdAsync(dropout.IDEvent))
             {
                 throw new Exception("Event id not found! ");
             }
-            if (GetDropoutByEventID(dropout.IDEvent) != null)
-            {
-                throw new Exception("This Dropout already exists");
-            }
+           // if (GetDropoutByEventID(dropout.IDEvent) != null)
+          //  {
+          //      throw new Exception("This Dropout already exists");
+          //  }
             var newDropout = _mapper.Map<Dropout>(dropout);
             newDropout.IDDropout = Guid.NewGuid();
             _context.Entry(newDropout).State = EntityState.Added;
