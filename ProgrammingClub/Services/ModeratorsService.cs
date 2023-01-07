@@ -32,6 +32,9 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Member id not found! ");
             }
+            if (GetModeratorByMemberID(moderator.IDMember) != null ) {
+                throw new Exception("This Moderator already exists");
+            }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
             _context.Entry(newModerator).State = EntityState.Added;
@@ -53,9 +56,16 @@ namespace ProgrammingClub.Services
             return await _context.Moderators.FirstOrDefaultAsync(m => m.IDModerator == id);
         }
 
+        public async Task<Moderator?> GetModeratorByMemberID(Guid? memberId)
+        {
+            if (memberId == null)
+                return null;
+            return await _context.Moderators.FirstOrDefaultAsync(m => m.IDMember == memberId);
+        }
+
         public async Task<IEnumerable<Moderator>> GetModerators()
         {
-            return _context.Moderators.ToList();
+             return await _context.Moderators.ToListAsync();
         }
 
         public async Task<Moderator?> UpdateModerator(Guid IDModerator, Moderator moderator)
@@ -81,6 +91,10 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Title cannot be null! ");
             }
+            if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
+            {
+                throw new Exception("Member id not found! ");
+            }
         }
 
         public async Task<Moderator?> UpdatePartiallyModerator(Guid IDModerator, Moderator moderator)
@@ -90,17 +104,34 @@ namespace ProgrammingClub.Services
             {
                 return null;
             }
-            if (!string.IsNullOrEmpty(moderator.Title))
+            bool needUpdate = false;
+
+            if (!string.IsNullOrEmpty(moderator.Title) && moderatorFromDatabase.Title != moderator.Title)
             {
                 moderatorFromDatabase.Title = moderator.Title;
+                needUpdate = true;
+                
             }
-            if (moderator.Description != null)
+            if (moderator.Description != null && moderatorFromDatabase.Description != moderator.Description)
             {
                 moderatorFromDatabase.Description = moderator.Description;
+                needUpdate = true;
             }
-
-            _context.Update(moderator);
-            await _context.SaveChangesAsync();
+            if (moderator.IDMember.HasValue && moderatorFromDatabase.IDMember != moderator.IDMember)
+            {
+                if (GetModeratorByMemberID(moderator.IDMember) != null)
+                {
+                    throw new Exception("This Moderator already exists");
+                }
+                moderatorFromDatabase.IDMember = moderator.IDMember;
+                needUpdate = true;
+            }
+            if (needUpdate)
+            {
+                await ValidateModerator(IDModerator, moderatorFromDatabase);
+                _context.Update(moderatorFromDatabase);
+                await _context.SaveChangesAsync();
+            }
             return moderatorFromDatabase;
         }
 
