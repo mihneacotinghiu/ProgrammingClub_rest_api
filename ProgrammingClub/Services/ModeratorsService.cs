@@ -32,9 +32,9 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Member id not found! ");
             }
-            if (GetModeratorByMemberID(moderator.IDMember) != null ) {
-                throw new Exception("This Moderator already exists");
-            }
+       //     if (GetModeratorByMemberID(moderator.IDMember) != null ) {
+         //       throw new Exception("This Moderator already exists");
+          //  }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
             _context.Entry(newModerator).State = EntityState.Added;

@@ -13,5 +13,6 @@ namespace ProgrammingClub.Services
         public Task<Dropout?> UpdatePartiallyModerator(Guid idDropout, Dropout dropout);
 
         public Task<Dropout?> GetDropoutById(Guid id);
+        Task<bool> DropoutExistByIdAsync(Guid? id);
     }
 }

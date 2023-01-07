@@ -27,10 +27,10 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Event id not found! ");
             }
-           // if (GetDropoutByEventID(dropout.IDEvent) != null)
-          //  {
-          //      throw new Exception("This Dropout already exists");
-          //  }
+         //   if (GetDropoutByEventID(dropout.IDEvent) != null)
+         //   {
+         //       throw new Exception("This Dropout already exists");
+         //   }
             var newDropout = _mapper.Map<Dropout>(dropout);
             newDropout.IDDropout = Guid.NewGuid();
             _context.Entry(newDropout).State = EntityState.Added;
@@ -119,7 +119,7 @@ namespace ProgrammingClub.Services
                 return null;
             return await _context.Dropouts.FirstOrDefaultAsync(m => m.IDEvent == eventID);
         }
-        public async Task<bool> DropoutExistByIdAsync(Guid id)
+        public async Task<bool> DropoutExistByIdAsync(Guid? id)
         {
             return await _context.Dropouts.CountAsync(dropout => dropout.IDDropout == id) > 0;
         }
