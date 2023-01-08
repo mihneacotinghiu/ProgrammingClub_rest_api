@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProgrammingClub.Exceptions;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
@@ -62,7 +63,7 @@ namespace ProgrammingClub.Controllers
                 await _announcementsService.CreateAnnouncementAsync(announcement);
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyAdded);
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
@@ -101,7 +102,7 @@ namespace ProgrammingClub.Controllers
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 
@@ -122,7 +123,7 @@ namespace ProgrammingClub.Controllers
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 

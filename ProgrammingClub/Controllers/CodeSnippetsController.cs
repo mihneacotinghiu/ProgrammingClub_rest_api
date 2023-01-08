@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProgrammingClub.Exceptions;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
@@ -66,7 +67,7 @@ namespace ProgrammingClub.Controllers
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyAdded);
 
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
@@ -86,7 +87,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCodeSnippet([FromQuery]Guid id , [FromBody]CodeSnippet codeSnippet)
+        public async Task<IActionResult> PutCodeSnippet([FromRoute]Guid id , [FromBody]CodeSnippet codeSnippet)
         {
             try
             {  
@@ -104,13 +105,13 @@ namespace ProgrammingClub.Controllers
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
 
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
 
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchCodeSnippet([FromQuery] Guid id, [FromBody] CodeSnippet codeSnippet)
+        public async Task<IActionResult> PatchCodeSnippet([FromRoute] Guid id, [FromBody] CodeSnippet codeSnippet)
         {
             try
             {
@@ -128,7 +129,7 @@ namespace ProgrammingClub.Controllers
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
 
             }
-            catch (IOException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
 

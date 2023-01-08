@@ -1,4 +1,6 @@
-﻿namespace ProgrammingClub.Helpers
+﻿using ProgrammingClub.Exceptions;
+
+namespace ProgrammingClub.Helpers
 {
     public class ValidationFunctions
     {
@@ -6,7 +8,7 @@
         {
             if(startDate.HasValue && endDate.HasValue && startDate > endDate)
             {
-                throw new IOException(Helpers.ErrorMessegesEnum.StartEndDatesError);
+                throw new ModelValidationException(Helpers.ErrorMessegesEnum.StartEndDatesError);
             }
         }
 

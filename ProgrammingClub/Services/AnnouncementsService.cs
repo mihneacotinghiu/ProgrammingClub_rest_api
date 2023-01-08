@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
+using ProgrammingClub.Exceptions;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
 
@@ -65,17 +66,56 @@ namespace ProgrammingClub.Services
 
         public async Task<Announcement?> UpdatePartiallyAnnouncementAsync(Guid id, Announcement announcement)
         {
-            Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
+            
+            bool announcementIsChanged = false, dateIsChanged = false;
 
             var announcementFromDatabase = await GetAnnounctmentByIdAsync(id);
-            if (announcementFromDatabase == null) { return null; }
+            if (announcementFromDatabase == null) 
+            {
+                return null;
+            }
 
-            if (announcement.Tags != null) { announcementFromDatabase.Tags = announcement.Tags; }
-            if (announcement.ValidFrom.HasValue) { announcementFromDatabase.ValidFrom = announcement.ValidFrom; }
-            if (announcement.ValidTo.HasValue) { announcementFromDatabase.ValidTo = announcement.ValidTo; }
-            if (announcement.Text != null) { announcementFromDatabase.Text = announcement.Text; }
-            if (announcement.Title != null) { announcementFromDatabase.Title = announcement.Title; }
-            if (announcement.EventDate.HasValue) { announcementFromDatabase.EventDate= announcement.EventDate; }
+            if (!string.IsNullOrEmpty(announcement.Tags)  && announcement.Tags != announcementFromDatabase.Tags) 
+            {
+                announcementFromDatabase.Tags = announcement.Tags;
+                announcementIsChanged = true;
+            }
+            if (announcement.ValidFrom.HasValue && announcement.ValidFrom != announcementFromDatabase.ValidFrom) 
+            {
+                announcementFromDatabase.ValidFrom = announcement.ValidFrom;
+                announcementIsChanged = true;
+                dateIsChanged= true;
+            }
+            if (announcement.ValidTo.HasValue && announcement.ValidTo != announcementFromDatabase.ValidTo) 
+            {
+                announcementFromDatabase.ValidTo = announcement.ValidTo;
+                announcementIsChanged = true;
+                dateIsChanged= true;
+            }
+            if (!string.IsNullOrEmpty(announcement.Text) && announcement.Text != announcementFromDatabase.Text) 
+            {
+                announcementFromDatabase.Text = announcement.Text;
+                announcementIsChanged = true;
+            }
+            if (!string.IsNullOrEmpty(announcement.Title) && announcement.Title != announcementFromDatabase.Title) 
+            {
+                announcementFromDatabase.Title = announcement.Title;
+                announcementIsChanged = true;
+            }
+            if (announcement.EventDate.HasValue && announcement.EventDate != announcementFromDatabase.EventDate) 
+            {
+                announcementFromDatabase.EventDate= announcement.EventDate;
+                announcementIsChanged = true;
+            }
+
+            if (!announcementIsChanged)
+            {
+                throw new ModelValidationException(Helpers.ErrorMessegesEnum.ZeroUpdatesToSave);
+            }
+            if(dateIsChanged) 
+            {
+                Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
+            }
 
             _context.Update(announcementFromDatabase);
             await _context.SaveChangesAsync();
