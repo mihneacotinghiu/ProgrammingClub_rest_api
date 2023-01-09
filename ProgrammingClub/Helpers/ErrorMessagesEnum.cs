@@ -4,6 +4,7 @@
     {
         public const string NoElementFound = "No element found in table!";
         public const string IncorectSize= "Incorext size";
+        public const string InternalServerError = "Internal server error please contact your administrator";
         public const string StartEndDatesError = "End date cannot be smaller than start date";
         public const string ZeroUpdatesToSave = "There are no updates to save";
 
@@ -16,8 +17,5 @@
         {
             public const string NoMemberFound = "Member doesn't exist";
         }
-
-        public const string  IncorectSize= "Incorext size";
-        public const string InternalServerError = "Internal server error please contact your administrator";
     }
 }
