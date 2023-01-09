@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
+using ProgrammingClub.Exceptions;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
 using System.Linq;
@@ -23,43 +24,29 @@ namespace ProgrammingClub.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventsParticipant>> GetAllMemberParticipations(Guid idMember)
+        public async Task<bool> GetAllMemberParticipations(Guid? idMember, Guid? idEvent)
         {
-            //returns list of all EventParticipant entries that have the given idMember
-            var participants = _context.EventsParticipants.Where(e => e.IdMember == idMember);
-            return await participants.ToListAsync();
+            return await _context.EventsParticipants.Where(e => e.IdMember == idMember && e.IdEvent == idEvent).AnyAsync();
         }
 
-        /* UNCOMMENT WHEN EVENTS ARE DONE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         * public async Task<IEnumerable<EventParticipant>> GetAllMemberParticipations(Guid idEvent)
-        {
-            //returns all Event Participants entries that have the given idMember
-            var participants = _context.EventParticipants.Where(e => e.IdEvent == idEvent);
-            return participants.ToList();
-        }
-         */
 
         public async Task CreateEventParticipant(CreateEventsParticipant participant)
         {
-            //verifying that a member with said ID exists
             if (!await _membersService.MemberExistByIdAsync(participant.IdMember))
-                throw new Exception("Member does not exist");
+                throw new ElementNotFoundInDBException("Member does not exist");
 
-            //Check that a member does not already have a listing to an event. ONE TO ONE RELATIONSHIP.
-            //Doesn't need to be done for event as doing it for member ensures it is safe - MAYBE????
-            var participants = await GetAllMemberParticipations(participant.IdMember);
-            if (participants.Any(x => x.IdEvent == participant.IdEvent))
+            
+            var participants = await GetAllMemberParticipations(participant.IdMember, participant.IdEvent);
+            if (participants == true)
             {
-                throw new Exception("Already in the participant list");
+                throw new ElementAlreadyExistsInDB("Already in the participant list");
             }
 
-            //add changes for event
-            var newEnetParticipant = _mapper.Map<EventsParticipant>(participant);
-            newEnetParticipant.IdEventParticipant = Guid.NewGuid();
+            var newEventParticipant = _mapper.Map<EventsParticipant>(participant);
+            newEventParticipant.IdEventParticipant = Guid.NewGuid();
 
-            //participant.Paid = false;
-            newEnetParticipant.Present = false;
-            _context.Entry(newEnetParticipant).State = EntityState.Added;
+            newEventParticipant.Present = false;
+            _context.Entry(newEventParticipant).State = EntityState.Added;
             await _context.SaveChangesAsync();
         }
 
@@ -84,26 +71,42 @@ namespace ProgrammingClub.Services
             return await _context.EventsParticipants.Where( x => x.IdEvent == eventId && x.Paid == isPaid).ToListAsync();
         }
 
+        public async Task<IEnumerable<EventsParticipant>> GetEventsParticipantsByEventAndPresentAsync(Guid eventId, bool isPresent)
+        {
+            return await _context.EventsParticipants.Where( x => x.IdEvent == eventId && x.Present == isPresent).ToListAsync();
+        }
+
+        public async Task<IEnumerable<EventsParticipant>> GetAllParticipantsToEvent(Guid eventId)
+        {
+            return await _context.EventsParticipants.Where( x => x.IdEvent==eventId).ToListAsync();
+        }
+
         public async Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant)
         {
+            
             if (!await EventParticipantExists(idEventParticipant))
             {
                 return null;
             }
 
-            eventParticipant.IdEventParticipant = idEventParticipant;
-            List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations((Guid)eventParticipant.IdMember);
-            for (int i = 0; i < participants.Count; i++)
+            var participantFromDB = await GetEventParticipantById(idEventParticipant);
+
+            if (participantFromDB != null && participantFromDB.IdMember != eventParticipant.IdMember)
             {
-                if (participants[i].IdEvent == eventParticipant.IdEvent)
+                var participants = await GetAllMemberParticipations(eventParticipant.IdMember, eventParticipant.IdEvent);
+                if (participants == true)
                 {
-                    return null;
+                    throw new ElementAlreadyExistsInDB("Already in the participant list for the given event");
                 }
+
             }
 
+            eventParticipant.IdEventParticipant = idEventParticipant;
+            
 
+            
             _context.Update(eventParticipant);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return eventParticipant;
         }
 
@@ -122,58 +125,34 @@ namespace ProgrammingClub.Services
 
             if (participant.IdMember != null)
             {
-                List<EventsParticipant> participants = (List<EventsParticipant>)await GetAllMemberParticipations((Guid)participant.IdMember);
-                for (int i = 0; i < participants.Count; i++)
+                
+                if(await GetAllMemberParticipations(participant.IdMember, participant.IdEvent) == true)
                 {
-                    if (participants[i].IdEvent == participant.IdEvent)
-                    {
-                        //does not change the member if the newly given member id already has a participation booked for the event
-                        return null;
-                    }
-                }
+                    return null;
+                }    
                 eventParticipantFromDb.IdMember = participant.IdMember;
             }
 
-            // paid and present to be handled by other endpoints
+            if(participant.Paid != null)
+            {
+                eventParticipantFromDb.Paid = participant.Paid;
+            }
+
+            if(participant.Present != null)
+            {
+                eventParticipantFromDb.Present = participant.Present;
+            }
+
 
             _context.Update(eventParticipantFromDb);
             await _context.SaveChangesAsync();
             return eventParticipantFromDb;
         }
 
-        public async Task<bool> UpdateEventParticipantPaid(Guid id)
-        {
-            //endpoint that sets the paid value as true, separate from regular update as it shouldn't be up to the user to mark as true
-            var eventParticipantFromDb = await GetEventParticipantById(id);
-            if (eventParticipantFromDb == null)
-            {
-                return false;
-            }
-
-            eventParticipantFromDb.Paid = true;
-            _context.Update(eventParticipantFromDb);
-            await _context.SaveChangesAsync();
-            return true;
-
-        }
-
-        public async Task<bool> UpdateEventParticipantPresent(Guid id)
-        {
-            var eventParticipantFromDb = await GetEventParticipantById(id);
-            if(eventParticipantFromDb == null)
-            {
-                return false;
-            }
-
-            eventParticipantFromDb.Present = true;
-            _context.Update(eventParticipantFromDb);
-            await _context.SaveChangesAsync();
-            return true;
-        }
 
         public async Task<EventsParticipant?> GetEventParticipantById(Guid id)
         {
-            return await _context.EventsParticipants.FirstOrDefaultAsync(e => e.IdEventParticipant == id);
+            return await _context.EventsParticipants.AsNoTracking().FirstOrDefaultAsync(e => e.IdEventParticipant == id);
         }
 
         public async Task<bool> EventParticipantExists(Guid id)

@@ -9,14 +9,14 @@ namespace ProgrammingClub.Services
     {
         public Task<IEnumerable<EventsParticipant>> GetEventsParticipantsAsync();
         public Task<IEnumerable<EventsParticipant>> GetEventsParticipantsByEventAndPaidAsync(Guid eventId, bool isPaid);
+        public Task<IEnumerable<EventsParticipant>> GetEventsParticipantsByEventAndPresentAsync(Guid eventId, bool isPresent);
+        public Task<IEnumerable<EventsParticipant>> GetAllParticipantsToEvent(Guid eventId);
         public Task CreateEventParticipant(CreateEventsParticipant participant);
         public Task<bool> DeleteEventParticipant(Guid idEventParticipant);
         public Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant);
         public Task<EventsParticipant?> UpdateEventParticipantPartially(Guid idEventParticipant, EventsParticipant participant);
         public Task<EventsParticipant?> GetEventParticipantById(Guid id);
         public Task<bool> EventParticipantExists(Guid id);
-        public Task<bool> UpdateEventParticipantPaid(Guid id);
-        public Task<bool> UpdateEventParticipantPresent(Guid id);
 
     }
 }
