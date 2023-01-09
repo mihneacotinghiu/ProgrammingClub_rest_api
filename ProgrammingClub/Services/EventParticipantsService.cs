@@ -91,20 +91,23 @@ namespace ProgrammingClub.Services
 
             var participantFromDB = await GetEventParticipantById(idEventParticipant);
 
-            if (participantFromDB != null && participantFromDB.IdMember != eventParticipant.IdMember)
+            if (participantFromDB != null)
             {
-                var participants = await GetAllMemberParticipations(eventParticipant.IdMember, eventParticipant.IdEvent);
-                if (participants == true)
+                if(participantFromDB.IdMember != eventParticipant.IdMember)
                 {
-                    throw new ElementAlreadyExistsInDB("Already in the participant list for the given event");
+                    var participants = await GetAllMemberParticipations(eventParticipant.IdMember, eventParticipant.IdEvent);
+                    if (participants == true)
+                    {
+                        throw new ElementAlreadyExistsInDB("Already in the participant list for the given event");
+                    }
                 }
 
+                _context.Entry(participantFromDB).State = EntityState.Detached;
             }
 
             eventParticipant.IdEventParticipant = idEventParticipant;
             
 
-            
             _context.Update(eventParticipant);
             await _context.SaveChangesAsync();
             return eventParticipant;
@@ -152,7 +155,7 @@ namespace ProgrammingClub.Services
 
         public async Task<EventsParticipant?> GetEventParticipantById(Guid id)
         {
-            return await _context.EventsParticipants.AsNoTracking().FirstOrDefaultAsync(e => e.IdEventParticipant == id);
+            return await _context.EventsParticipants.FirstOrDefaultAsync(e => e.IdEventParticipant == id);
         }
 
         public async Task<bool> EventParticipantExists(Guid id)
