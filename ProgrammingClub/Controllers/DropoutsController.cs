@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProgrammingClub.Helpers;
-using ProgrammingClub.Models.CreateModerator;
 using ProgrammingClub.Models;
 using ProgrammingClub.Services;
 using System.Net;
