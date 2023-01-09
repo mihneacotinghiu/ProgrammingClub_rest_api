@@ -5,7 +5,7 @@ using AutoMapper.Execution;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
-using ProgrammingClub.Models.CreateModerator;
+using ProgrammingClub.Models.CreateModels;
 using Member = ProgrammingClub.Models.Member;
 
 namespace ProgrammingClub.Services
@@ -31,9 +31,7 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Member id not found! ");
             }
-
-            if (await GetModeratorByMemberID(moderator.IDMember) != null)
-            {
+            if (await GetModeratorByMemberID(moderator.IDMember) != null ) {
                 throw new Exception("This Moderator already exists");
             }
             var newModerator = _mapper.Map<Moderator>(moderator);

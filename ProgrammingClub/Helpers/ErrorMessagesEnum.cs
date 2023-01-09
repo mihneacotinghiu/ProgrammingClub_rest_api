@@ -6,6 +6,6 @@
 
         public const string  IncorectSize= "Incorext size";
 
-
+        public const string ID_NotFound = "ID NOT FOUND!";
     }
 }

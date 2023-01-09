@@ -53,7 +53,22 @@ namespace ProgrammingClub.Controllers
                 catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
             }
 
-            [HttpDelete("{id}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDropoutById([FromRoute] Guid id)
+        {
+
+            try
+            {
+                Dropout? dropout = await _dropoutsService.GetDropoutById(id);
+                if (dropout != null)
+                    return Ok(dropout);
+
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
+            }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+        }
+
+        [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteDropouts([FromRoute] Guid id)
             {
                 try

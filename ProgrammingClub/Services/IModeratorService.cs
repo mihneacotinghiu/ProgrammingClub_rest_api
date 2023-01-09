@@ -1,7 +1,6 @@
 ﻿using ProgrammingClub.Models.CreateModels;
 using ProgrammingClub.Models;
 using Microsoft.EntityFrameworkCore;
-using ProgrammingClub.Models.CreateModerator;
 
 namespace ProgrammingClub.Services
 {

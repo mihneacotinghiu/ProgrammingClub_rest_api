@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
-using ProgrammingClub.Models.CreateModerator;
 
 namespace CustomerPortal.API
 {

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
-using ProgrammingClub.Models.CreateModerator;
 using ProgrammingClub.Services;
 
 namespace ProgrammingClub.Controllers
@@ -49,6 +48,21 @@ namespace ProgrammingClub.Controllers
                 }
 
                 return Ok(moderators);
+            }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetModeratorById([FromRoute] Guid id)
+        {
+
+            try
+            {
+                Moderator? moderator = await _moderatorsService.GetModeratorById(id);
+                if (moderator != null)
+                    return Ok(moderator);
+
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
