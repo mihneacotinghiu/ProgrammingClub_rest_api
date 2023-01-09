@@ -37,7 +37,7 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                PricingModels? pricingModels = await _pricingModelsService.GetPricingModelByIdAsync(id);
+                PricingModel? pricingModels = await _pricingModelsService.GetPricingModelByIdAsync(id);
 
                 if (pricingModels != null)
 
@@ -53,7 +53,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostPricingModels([FromBody] PricingModels pricingModels)
+        public async Task<IActionResult> PostPricingModels([FromBody] PricingModel pricingModels)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace ProgrammingClub.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> PutMember(Guid idPricingModels, [FromBody] PricingModels pricingModels)
+        public async Task<IActionResult> PutMember(Guid idPricingModels, [FromBody] PricingModel pricingModels)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> PatchEventType(Guid idPricingModels, [FromBody] PricingModels pricingModels)
+        public async Task<IActionResult> PatchEventType(Guid idPricingModels, [FromBody] PricingModel pricingModels)
         {
             try
             {

@@ -13,12 +13,12 @@ namespace ProgrammingClub.Services
             _context = context;
         }
 
-        public async Task CreatePricingModelsAsync(PricingModels pricingModels)
+        public async Task CreatePricingModelsAsync(PricingModel pricingModels)
         {
             if (pricingModels == null)
                 throw new Exception();
 
-            pricingModels.IdPricingModels = Guid.NewGuid();
+            pricingModels.IdPricingModel = Guid.NewGuid();
 
 
             _context.Entry(pricingModels).State = EntityState.Added;
@@ -27,7 +27,7 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> DeletePricingModelsAsync(Guid id)
         {
-            PricingModels? pricingModels = await GetPricingModelByIdAsync(id);
+            PricingModel? pricingModels = await GetPricingModelByIdAsync(id);
             if (pricingModels == null)
                 return false;
             _context.PricingModels.Remove(pricingModels);
@@ -35,18 +35,18 @@ namespace ProgrammingClub.Services
             return true;
         }
 
-        public async Task<IEnumerable<PricingModels>> GetPricingModelsAsync()
+        public async Task<IEnumerable<PricingModel>> GetPricingModelsAsync()
         {
             return await _context.PricingModels.ToListAsync();
         }
 
-        public async  Task<PricingModels?> GetPricingModelByIdAsync(Guid id)
+        public async  Task<PricingModel?> GetPricingModelByIdAsync(Guid id)
         {
-            return await _context.PricingModels.FirstOrDefaultAsync(p => p.IdPricingModels == id);
+            return await _context.PricingModels.FirstOrDefaultAsync(p => p.IdPricingModel == id);
         }
 
 
-        public async Task<PricingModels?> UpdatePricingModelsAsync(Guid id, PricingModels pricingModels)
+        public async Task<PricingModel?> UpdatePricingModelsAsync(Guid id, PricingModel pricingModels)
         {
             if (GetPricingModelByIdAsync(id) == null)
                 return null;
@@ -55,7 +55,7 @@ namespace ProgrammingClub.Services
             return pricingModels;
         }
 
-        public async Task<PricingModels?> UpdatePricingModelsPartiallyAsync(Guid id, PricingModels pricingModels)
+        public async Task<PricingModel?> UpdatePricingModelsPartiallyAsync(Guid id, PricingModel pricingModels)
         {
             var pricingModelsFromDatabase = await GetPricingModelByIdAsync(id);
 
@@ -86,7 +86,7 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> PricingModelExistByIdAsync(Guid id)
         {
-            return await _context.PricingModels.AnyAsync(p => p.IdPricingModels == id);
+            return await _context.PricingModels.AnyAsync(p => p.IdPricingModel == id);
         }
     }
 }

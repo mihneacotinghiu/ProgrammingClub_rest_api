@@ -2,12 +2,12 @@
 
 namespace ProgrammingClub.Models
 {
-    public class PricingModels
+    public class PricingModel
     {
         [Key]
-        public Guid? IdPricingModels { get; set; }
+        public Guid? IdPricingModel { get; set; }
         public string? Name { get; set; }
-        public float? Price { get; set; }
+        public double? Price { get; set; }
         public DateTime? ModifiedDate { get; set; }
     }
 }

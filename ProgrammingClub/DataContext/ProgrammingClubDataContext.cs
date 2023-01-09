@@ -16,7 +16,6 @@ namespace ProgrammingClub.DataContext
         public DbSet<Membership> Memberships { get; set; }
         public DbSet<MembershipType> MembershipTypes { get; set; }
         public DbSet<EventType> EventType { get; set; } 
-        public DbSet<PricingModels> PricingModels { get; set; }
-
+        public DbSet<PricingModel> PricingModels { get; set; }
     }
 }
