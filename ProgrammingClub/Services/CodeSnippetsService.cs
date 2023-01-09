@@ -23,7 +23,6 @@ namespace ProgrammingClub.Services
         public async Task CreateCodeSnippetAsync(CreateCodeSnippet codeSnippet)
         {
             var newCodeSnippet = _mapper.Map<CodeSnippet>(codeSnippet);
-
             await ValidateCodeSnippet(newCodeSnippet);
 
             newCodeSnippet.IdCodeSnippet = Guid.NewGuid();
@@ -33,8 +32,10 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> DeleteCodeSnippetAsync(Guid id)
         {
-            if (!await CodeSnippetExistByIdAsync(id)) { return false; }
-
+            if (!await CodeSnippetExistByIdAsync(id)) 
+            {
+                return false;
+            }
             _context.CodeSnippets.Remove(new CodeSnippet { IdCodeSnippet = id });
             await _context.SaveChangesAsync();
             return true;
@@ -52,12 +53,14 @@ namespace ProgrammingClub.Services
 
         public async Task<CodeSnippet?> PartiallyUpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet)
         {
-            codeSnippet.IdCodeSnippet = id;
             bool codeSnippetIsChanged = false, idMemberIsChanged = false, idPreviousCodeSnippetIsChanged = false;
-
             var codeSnippetFromDatabase = await GetCodeSnippetByIdAsync(id);
-            if (codeSnippetFromDatabase == null) { return null; }
+            codeSnippet.IdCodeSnippet = id;
 
+            if (codeSnippetFromDatabase == null)
+            {
+                return null;
+            }
             if (codeSnippet.isPublished.HasValue && codeSnippet.isPublished != codeSnippetFromDatabase.isPublished)
             {
                 codeSnippetFromDatabase.isPublished = codeSnippet.isPublished;
@@ -99,7 +102,6 @@ namespace ProgrammingClub.Services
             {
                 await ValidateCodeSnippet(codeSnippetFromDatabase);
             }
-
             _context.CodeSnippets.Update(codeSnippetFromDatabase);
             await _context.SaveChangesAsync();
             return codeSnippetFromDatabase;
@@ -111,7 +113,6 @@ namespace ProgrammingClub.Services
             {
                 return null;
             }
-
             await ValidateCodeSnippet(codeSnippet);
 
             codeSnippet.IdCodeSnippet= id;
@@ -138,13 +139,12 @@ namespace ProgrammingClub.Services
             return await _context.Members.AnyAsync(c => c.IdMember == id);
         }
 
-
+         
         private async Task ValidateCodeSnippet(CodeSnippet codeSnippet)
         {
             Guid? idCS = codeSnippet.IdSnippetPreviousVersion;
             Guid? idMember = codeSnippet.IdMember;
             
-
             if (!idCS.HasValue && await CodeSnippetExistByIdAsync(idCS))
             {
                 throw new ModelValidationException(Helpers.ErrorMessegesEnum.NoCodeSnippetFound);

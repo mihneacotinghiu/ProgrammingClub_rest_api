@@ -30,8 +30,10 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> DeleteAnnouncementAsync(Guid id)
         {
-            if (!await ExistAnnounctmenAsync(id)) { return false; }
-
+            if (!await ExistAnnounctmenAsync(id)) 
+            {
+                return false; 
+            }
             _context.Announcements.Remove(new Announcement { IdAnnouncement= id });
             await _context.SaveChangesAsync();
             return true;
@@ -55,9 +57,10 @@ namespace ProgrammingClub.Services
         public async Task<Announcement?> UpdateAnnouncementAsync(Guid id , Announcement announcement)
         {
             Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
-            
-            if (!await ExistAnnounctmenAsync(id)) { return null; }
-
+            if (!await ExistAnnounctmenAsync(id)) 
+            {
+                return null;
+            }
             announcement.IdAnnouncement = id;
             _context.Update(announcement);
             await _context.SaveChangesAsync();
@@ -68,13 +71,13 @@ namespace ProgrammingClub.Services
         {
             
             bool announcementIsChanged = false, dateIsChanged = false;
-
             var announcementFromDatabase = await GetAnnounctmentByIdAsync(id);
+            announcement.IdAnnouncement = id;
+
             if (announcementFromDatabase == null) 
             {
                 return null;
             }
-
             if (!string.IsNullOrEmpty(announcement.Tags)  && announcement.Tags != announcementFromDatabase.Tags) 
             {
                 announcementFromDatabase.Tags = announcement.Tags;
@@ -116,7 +119,6 @@ namespace ProgrammingClub.Services
             {
                 Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
             }
-
             _context.Update(announcementFromDatabase);
             await _context.SaveChangesAsync();
             return announcementFromDatabase;
