@@ -27,10 +27,10 @@ namespace ProgrammingClub.Services
             {
                 throw new Exception("Event id not found! ");
             }
-         //   if (GetDropoutByEventID(dropout.IDEvent) != null)
-         //   {
-         //       throw new Exception("This Dropout already exists");
-         //   }
+            if (await GetDropoutByEventID(dropout.IDEvent) != null)
+            {
+                throw new Exception("This Dropout already exists");
+            }
             var newDropout = _mapper.Map<Dropout>(dropout);
             newDropout.IDDropout = Guid.NewGuid();
             _context.Entry(newDropout).State = EntityState.Added;

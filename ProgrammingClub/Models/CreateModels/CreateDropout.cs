@@ -11,6 +11,6 @@ namespace ProgrammingClub.Models.CreateModels
         [Required]
         public Guid? IDEvent { get; set; }
         [Required]
-        public float? DropoutRate { get; set; }
+        public decimal? DropoutRate { get; set; }
     }
 }

@@ -50,7 +50,7 @@ namespace ProgrammingClub.Controllers
 
                     return Ok(dropouts);
                 }
-                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
             }
 
             [HttpDelete("{id}")]
@@ -65,7 +65,7 @@ namespace ProgrammingClub.Controllers
                     }
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
-                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
             }
 
             [HttpPut("{id}")]
@@ -86,7 +86,7 @@ namespace ProgrammingClub.Controllers
 
                     return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
                 }
-                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
 
             }
 
@@ -108,7 +108,7 @@ namespace ProgrammingClub.Controllers
 
                     return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
                 }
-                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+                catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
 
             }
         }

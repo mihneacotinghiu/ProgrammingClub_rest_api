@@ -27,14 +27,15 @@ namespace ProgrammingClub.Services
 
         public async Task CreateModerator(CreateModerator moderator)
         {
-
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
                 throw new Exception("Member id not found! ");
             }
-       //     if (GetModeratorByMemberID(moderator.IDMember) != null ) {
-         //       throw new Exception("This Moderator already exists");
-          //  }
+
+            if (await GetModeratorByMemberID(moderator.IDMember) != null)
+            {
+                throw new Exception("This Moderator already exists");
+            }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
             _context.Entry(newModerator).State = EntityState.Added;

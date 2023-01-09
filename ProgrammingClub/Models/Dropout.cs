@@ -7,6 +7,6 @@ namespace ProgrammingClub.Models
         [Key]
         public Guid? IDDropout { get; set; }
         public Guid? IDEvent { get; set; }
-        public float? DropoutRate { get; set; }
+        public decimal? DropoutRate { get; set; }
     }
 }
