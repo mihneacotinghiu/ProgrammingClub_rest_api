@@ -8,6 +8,7 @@ namespace ProgrammingClub.Services
     public interface IEventParticipantsService
     {
         public Task<IEnumerable<EventsParticipant>> GetEventsParticipantsAsync();
+        public Task<IEnumerable<EventsParticipant>> GetEventsParticipantsByEventAndPaidAsync(Guid eventId, bool isPaid);
         public Task CreateEventParticipant(CreateEventsParticipant participant);
         public Task<bool> DeleteEventParticipant(Guid idEventParticipant);
         public Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant);

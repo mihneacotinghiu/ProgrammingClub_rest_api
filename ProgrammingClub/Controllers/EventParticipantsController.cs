@@ -49,6 +49,24 @@ namespace ProgrammingClub.Controllers
             catch { return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); }
         }
 
+        [HttpGet("event/{eventId}/ispaid/{isPaid}")]
+        public async Task<IActionResult> GetEventParticipantByID([FromRoute] Guid eventId, [FromRoute] bool isPaid)
+        {
+            try
+            {
+                var eventParticipant = await _eventParticipantsService.GetEventsParticipantsByEventAndPaidAsync(eventId, isPaid);
+                if (eventParticipant != null)
+                {
+                    return Ok(eventParticipant);
+                }
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+            }
+            catch 
+            { 
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); 
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateEventParticipant([FromBody] CreateEventsParticipant eventParticipant)
         {
