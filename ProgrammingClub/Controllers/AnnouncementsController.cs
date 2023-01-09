@@ -29,7 +29,7 @@ namespace ProgrammingClub.Controllers
                 var announcements = await _announcementsService.GetAnnouncementsAsync();
                 if (announcements == null || !announcements.Any())
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(announcements);
             }
@@ -44,7 +44,7 @@ namespace ProgrammingClub.Controllers
                 var announcement = await _announcementsService.GetAnnounctmentByIdAsync(id);
                 if (announcement == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(announcement);
             }
@@ -78,7 +78,7 @@ namespace ProgrammingClub.Controllers
                 {
                     return Ok(Helpers.SuccessMessegesEnum.ElementSuccesfullyDeleted);
                 }
-                return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
 
@@ -96,7 +96,7 @@ namespace ProgrammingClub.Controllers
                 var updatedAnnoucement = await _announcementsService.UpdateAnnouncementAsync(id, announcement);
                 if(updatedAnnoucement == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
 
 
@@ -118,7 +118,7 @@ namespace ProgrammingClub.Controllers
                 var updatedAnnoucement = await _announcementsService.UpdatePartiallyAnnouncementAsync(id, announcement);
                 if (updatedAnnoucement == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);

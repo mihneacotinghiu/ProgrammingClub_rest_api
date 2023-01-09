@@ -49,7 +49,7 @@ namespace ProgrammingClub.Controllers
                // return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
-            return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+            return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
         }
 
 

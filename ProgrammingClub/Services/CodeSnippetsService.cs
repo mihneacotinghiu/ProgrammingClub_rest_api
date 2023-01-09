@@ -98,7 +98,7 @@ namespace ProgrammingClub.Services
 
             if (!codeSnippetIsChanged) 
             {
-                throw new ModelValidationException(Helpers.ErrorMessegesEnum.ZeroUpdatesToSave);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.ZeroUpdatesToSave);
             }
             if(idMemberIsChanged || idPreviousCodeSnippetIsChanged)
             {
@@ -140,17 +140,17 @@ namespace ProgrammingClub.Services
             
             if (idCSPrevious.HasValue && !await CodeSnippetExistByIdAsync(idCSPrevious))
             {
-                throw new ModelValidationException(Helpers.ErrorMessegesEnum.CodeSnippet.NoCodeSnippetFound);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.NoCodeSnippetFound);
             }
             if (!await _membersService.MemberExistByIdAsync(idMember))
             {
-                throw new ModelValidationException(Helpers.ErrorMessegesEnum.NoMemberFound);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.Member.NoMemberFound);
             }
             if (extraValidationForUpdatesIsNeeded)
             {
                 if(idCSPrevious.HasValue && idCSPrevious == codeSnippet.IdSnippetPreviousVersion)
                 {
-                    throw new ModelValidationException(Helpers.ErrorMessegesEnum.CodeSnippet.idCSPreviousIdenticalToIdCS);
+                    throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.idCSPreviousIdenticalToIdCS);
                 }
             }
         }

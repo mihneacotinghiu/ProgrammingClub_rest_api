@@ -28,7 +28,7 @@ namespace ProgrammingClub.Controllers
                 var members = await _membersService.GetMembers();
                 if (members == null || !members.Any())
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(members);
@@ -46,7 +46,7 @@ namespace ProgrammingClub.Controllers
                 if (member != null)
                     return Ok(member);
 
-                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
@@ -96,7 +96,7 @@ namespace ProgrammingClub.Controllers
                 var updatedMember = await _membersService.UpdateMember(idMember, member);
                 if (updatedMember == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -118,7 +118,7 @@ namespace ProgrammingClub.Controllers
                 var updatedMember = await _membersService.UpdatePartiallyMember(idMember, member);
                 if (updatedMember == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);

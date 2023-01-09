@@ -30,7 +30,7 @@ namespace ProgrammingClub.Controllers
                 var codeSnippets = await _codeSnippetsService.GetCodeSnippetsAsync();
                 if(codeSnippets == null || !codeSnippets.Any())
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(codeSnippets);
 
@@ -46,7 +46,7 @@ namespace ProgrammingClub.Controllers
                 var codeSnippet = await _codeSnippetsService.GetCodeSnippetByIdAsync(id);
                 if(codeSnippet == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(codeSnippet);
 
@@ -81,7 +81,7 @@ namespace ProgrammingClub.Controllers
                 {
                     return Ok(Helpers.SuccessMessegesEnum.ElementSuccesfullyDeleted);
                 }
-                return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessegesEnum.NoElementFound);
+                return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessagesEnum.NoElementFound);
             }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
         }
@@ -99,7 +99,7 @@ namespace ProgrammingClub.Controllers
 
                 if(updatedCodeSnippet == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
@@ -123,7 +123,7 @@ namespace ProgrammingClub.Controllers
 
                 if (updatedPartyallyCodeSnippet == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
 
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);

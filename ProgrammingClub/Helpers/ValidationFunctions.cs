@@ -8,7 +8,7 @@ namespace ProgrammingClub.Helpers
         {
             if(startDate.HasValue && endDate.HasValue && startDate > endDate)
             {
-                throw new ModelValidationException(Helpers.ErrorMessegesEnum.StartEndDatesError);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.StartEndDatesError);
             }
         }
 

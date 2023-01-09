@@ -113,7 +113,7 @@ namespace ProgrammingClub.Services
 
             if (!announcementIsChanged)
             {
-                throw new ModelValidationException(Helpers.ErrorMessegesEnum.ZeroUpdatesToSave);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.ZeroUpdatesToSave);
             }
             if(dateIsChanged) 
             {
