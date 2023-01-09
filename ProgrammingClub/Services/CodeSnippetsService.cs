@@ -74,7 +74,7 @@ namespace ProgrammingClub.Services
                 codeSnippetIsChanged = true;
                 idMemberIsChanged= true;
             }
-            if (codeSnippet.IdSnippetPreviousVersion.HasValue && codeSnippet.IdSnippetPreviousVersion != codeSnippetFromDatabase.IdSnippetPreviousVersion)
+            if (codeSnippet.IdSnippetPreviousVersion != codeSnippetFromDatabase.IdSnippetPreviousVersion)
             {
                 codeSnippetFromDatabase.IdSnippetPreviousVersion = codeSnippet.IdSnippetPreviousVersion;
                 codeSnippetIsChanged = true;
