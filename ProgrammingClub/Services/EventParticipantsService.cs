@@ -76,7 +76,12 @@ namespace ProgrammingClub.Services
 
         public async Task<IEnumerable<EventsParticipant>> GetEventsParticipantsAsync()
         {
-            return _context.EventsParticipants.ToList();
+            return await _context.EventsParticipants.ToListAsync();
+        }
+
+        public async Task<IEnumerable<EventsParticipant>> GetEventsParticipantsByEventAndPaidAsync(Guid eventId, bool isPaid)
+        {
+            return await _context.EventsParticipants.Where( x => x.IdEvent == eventId && x.Paid == isPaid).ToListAsync();
         }
 
         public async Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant)
