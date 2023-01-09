@@ -17,5 +17,7 @@
             public const string NoMemberFound = "Member doesn't exist";
         }
 
+        public const string  IncorectSize= "Incorext size";
+        public const string InternalServerError = "Internal server error please contact your administrator";
     }
 }

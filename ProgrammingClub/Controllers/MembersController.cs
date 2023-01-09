@@ -4,6 +4,7 @@ using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
 using ProgrammingClub.Services;
+using System.Data;
 using System.Net;
 using System.Net.WebSockets;
 
@@ -14,10 +15,15 @@ namespace ProgrammingClub.Controllers
     public class MembersController : ControllerBase
     {
         private readonly IMembersService _membersService;
+        private readonly ILogger<MembersController> _logger;
 
-        public MembersController(IMembersService membersService)
+        public MembersController(
+            IMembersService membersService,
+            ILogger<MembersController> logger
+            )
         {
             _membersService = membersService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -25,7 +31,9 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
+                _logger.LogError("GetMember start");
                 var members = await _membersService.GetMembers();
+                _logger.LogError($"GetMember end, total results: {members?.Count()}");
                 if (members == null || !members.Any())
                 {
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
@@ -33,22 +41,30 @@ namespace ProgrammingClub.Controllers
 
                 return Ok(members);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) {
+                _logger.LogError($"GetMembers error: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError); 
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMemberById([FromRoute] Guid id)
         {
-
             try
             {
+                _logger.LogError($"GetMemberById start, id: {id}");
                 Member? member = await _membersService.GetMemberById(id);
+                _logger.LogError($"GetMemberById end");
                 if (member != null)
                     return Ok(member);
 
                 return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) 
+            {
+                _logger.LogError($"GetMemberById error: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ErrorMessagesEnum.InternalServerError);
+            }
         }
 
         [HttpPost]
@@ -84,7 +100,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMember([FromRoute] Guid idMember,[FromBody] Member member)
+        public async Task<IActionResult> PutMember([FromRoute] Guid id,[FromBody] Member member)
         {
             try
             {
@@ -93,7 +109,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
                 
-                var updatedMember = await _membersService.UpdateMember(idMember, member);
+                var updatedMember = await _membersService.UpdateMember(id, member);
                 if (updatedMember == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
@@ -106,7 +122,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchMember([FromRoute]Guid idMember, [FromBody] Member member)
+        public async Task<IActionResult> PatchMember([FromRoute]Guid id, [FromBody] Member member)
         {
             try
             {
@@ -115,7 +131,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
 
-                var updatedMember = await _membersService.UpdatePartiallyMember(idMember, member);
+                var updatedMember = await _membersService.UpdatePartiallyMember(id, member);
                 if (updatedMember == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
