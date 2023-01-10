@@ -99,7 +99,7 @@ namespace ProgrammingClub.Services
         {
             if (id == null)
             {
-                return false;
+                throw new Exception(ErrorMessagesEnum.Member_ID_NotFound);
             }
             return await _context.Members.CountAsync(m => m.IdMember == id) > 0;
         }

@@ -13,5 +13,6 @@ namespace ProgrammingClub.Services
         public Task<Moderator?> UpdatePartiallyModerator(Guid idModerator,Moderator moderator);
 
         public Task<Moderator?> GetModeratorById(Guid id);
+        Task<bool> ModeratorExistByIdAsync(Guid? id);
     }
 }

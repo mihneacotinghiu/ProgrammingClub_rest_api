@@ -11,6 +11,7 @@
         public const string ID_NotFound = "Id not found!";
         public const string Dropout_ID_NotFound = "Dropout  Id not found!";
         public const string Moderator_ID_NotFound = "Moderator  Id not found!";
+        public const string Member_ID_NotFound = "Member  Id not found!";
 
         public const string AlreadyExistsById = "Already Exists By Id";
 

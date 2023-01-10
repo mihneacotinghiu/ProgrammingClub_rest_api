@@ -44,7 +44,7 @@ namespace ProgrammingClub.Services
         public async Task<bool> DeleteModerator(Guid id)
         {
             if (!await ModeratorExistByIdAsync(id))
-                throw new Exception(ErrorMessagesEnum.ID_NotFound);
+                throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
 
             _context.Moderators.Remove(new Moderator { IDModerator = id });
             await _context.SaveChangesAsync();
@@ -53,6 +53,10 @@ namespace ProgrammingClub.Services
 
         public async Task<Moderator?> GetModeratorById(Guid id)
         {
+            if (!await ModeratorExistByIdAsync(id))
+            {
+                throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
+            }
             return await _context.Moderators.FirstOrDefaultAsync(m => m.IDModerator == id);
         }
 
@@ -81,7 +85,7 @@ namespace ProgrammingClub.Services
         {
             if (!await ModeratorExistByIdAsync(IDModerator))
             {
-                throw new Exception(ErrorMessagesEnum.ID_NotFound);
+                throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
             }
             if (moderator.Description == null)
             {
@@ -93,7 +97,7 @@ namespace ProgrammingClub.Services
             }
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new Exception(ErrorMessagesEnum.ID_NotFound);
+                throw new Exception(ErrorMessagesEnum.Member_ID_NotFound);
             }
         }
 
@@ -106,7 +110,7 @@ namespace ProgrammingClub.Services
             }
             bool needUpdate = false;
 
-            if (!string.IsNullOrEmpty(moderator.Title) && moderatorFromDatabase.Title != moderator.Title)
+            if (moderator.Title != null && moderatorFromDatabase.Title != moderator.Title)
             {
                 moderatorFromDatabase.Title = moderator.Title;
                 needUpdate = true;
@@ -121,7 +125,7 @@ namespace ProgrammingClub.Services
             {
                 if (GetModeratorByMemberID(moderator.IDMember) != null)
                 {
-                    throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
+                    throw new Exception(ErrorMessagesEnum.Member_ID_NotFound);
                 }
                 moderatorFromDatabase.IDMember = moderator.IDMember;
                 needUpdate = true;
@@ -135,11 +139,11 @@ namespace ProgrammingClub.Services
             return moderatorFromDatabase;
         }
 
-        public async Task<bool> ModeratorExistByIdAsync(Guid id)
+        public async Task<bool> ModeratorExistByIdAsync(Guid? id)
         {
             if (id == null)
             {
-                throw new Exception(ErrorMessagesEnum.ID_NotFound);
+                throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
             }
             return await _context.Moderators.CountAsync(moderator => moderator.IDModerator == id) > 0;
         }

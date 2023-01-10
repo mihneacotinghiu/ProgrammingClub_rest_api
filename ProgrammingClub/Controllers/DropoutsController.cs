@@ -64,7 +64,7 @@ namespace ProgrammingClub.Controllers
 
                 return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpDelete("{id}")]
