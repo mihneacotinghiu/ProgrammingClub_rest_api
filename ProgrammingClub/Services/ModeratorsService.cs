@@ -44,7 +44,7 @@ namespace ProgrammingClub.Services
         public async Task<bool> DeleteModerator(Guid id)
         {
             if (!await ModeratorExistByIdAsync(id))
-                return false;
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
 
             _context.Moderators.Remove(new Moderator { IDModerator = id });
             await _context.SaveChangesAsync();
@@ -121,7 +121,7 @@ namespace ProgrammingClub.Services
             {
                 if (GetModeratorByMemberID(moderator.IDMember) != null)
                 {
-                    throw new Exception(ErrorMessagesEnum.AlreadyExistsById);
+                    throw new Exception(ErrorMessagesEnum.Moderator_ID_NotFound);
                 }
                 moderatorFromDatabase.IDMember = moderator.IDMember;
                 needUpdate = true;
@@ -137,6 +137,10 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> ModeratorExistByIdAsync(Guid id)
         {
+            if (id == null)
+            {
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
+            }
             return await _context.Moderators.CountAsync(moderator => moderator.IDModerator == id) > 0;
         }
     }

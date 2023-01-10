@@ -10,7 +10,7 @@ namespace ProgrammingClub.Services
         public Task CreateDropout(CreateDropout dropout);
         public Task<bool> DeleteDropout(Guid id);
         public Task<Dropout?> UpdateDropout(Guid idDropout, Dropout dropout);
-        public Task<Dropout?> UpdatePartiallyModerator(Guid idDropout, Dropout dropout);
+        public Task<Dropout?> UpdatePartiallyDropout(Guid idDropout, Dropout dropout);
 
         public Task<Dropout?> GetDropoutById(Guid id);
         Task<bool> DropoutExistByIdAsync(Guid? id);

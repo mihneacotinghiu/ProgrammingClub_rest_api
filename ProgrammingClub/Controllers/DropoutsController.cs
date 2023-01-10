@@ -114,7 +114,7 @@ namespace ProgrammingClub.Controllers
                         return StatusCode((int)HttpStatusCode.BadRequest);
                     }
 
-                    var updatedDropout = await _dropoutsService.UpdatePartiallyModerator(id, dropout);
+                    var updatedDropout = await _dropoutsService.UpdatePartiallyDropout(id, dropout);
                     if (updatedDropout == null)
                     {
                         return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);

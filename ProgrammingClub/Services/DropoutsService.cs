@@ -41,7 +41,7 @@ namespace ProgrammingClub.Services
         public async Task<bool> DeleteDropout(Guid id)
         {
             if (!await DropoutExistByIdAsync(id))
-                return false;
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
 
             _context.Dropouts.Remove(new Dropout { IDDropout = id });
             await _context.SaveChangesAsync();
@@ -50,6 +50,10 @@ namespace ProgrammingClub.Services
 
         public async Task<Dropout?> GetDropoutById(Guid id)
         {
+            if (!await DropoutExistByIdAsync(id))
+            {
+                throw new Exception(ErrorMessagesEnum.Dropout_ID_NotFound);
+            }
             return await _context.Dropouts.FirstOrDefaultAsync(m => m.IDDropout == id);
         }
 
@@ -81,7 +85,7 @@ namespace ProgrammingClub.Services
                 throw new Exception(ErrorMessagesEnum.Event_ID_NotFound);
             }
         }
-        public async Task<Dropout?> UpdatePartiallyModerator(Guid idDropout, Dropout dropout)
+        public async Task<Dropout?> UpdatePartiallyDropout(Guid idDropout, Dropout dropout)
         {
             var dropoutFromDatabase = await GetDropoutById(idDropout);
             if (dropoutFromDatabase == null)
@@ -101,7 +105,7 @@ namespace ProgrammingClub.Services
             {
                 if (GetDropoutByEventID(dropout.IDEvent) != null)
                 {
-                    throw new Exception(ErrorMessagesEnum.AlreadyExistsById);
+                    throw new Exception(ErrorMessagesEnum.Event_ID_NotFound);
                 }
                 dropoutFromDatabase.IDEvent = dropout.IDEvent;
                 needUpdate = true;
@@ -122,6 +126,10 @@ namespace ProgrammingClub.Services
         }
         public async Task<bool> DropoutExistByIdAsync(Guid? id)
         {
+            if (id == null)
+            {
+                throw new Exception(ErrorMessagesEnum.Dropout_ID_NotFound);
+            }
             return await _context.Dropouts.CountAsync(dropout => dropout.IDDropout == id) > 0;
         }
     }

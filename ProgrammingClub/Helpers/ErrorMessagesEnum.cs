@@ -10,6 +10,7 @@
         public const string Event_ID_NotFound = "Event Id not found!";
         public const string ID_NotFound = "Id not found!";
         public const string Dropout_ID_NotFound = "Dropout  Id not found!";
+        public const string Moderator_ID_NotFound = "Moderator  Id not found!";
 
         public const string AlreadyExistsById = "Already Exists By Id";
 
