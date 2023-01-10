@@ -70,15 +70,15 @@ namespace ProgrammingClub.Services
         {
             if (!await DropoutExistByIdAsync(idDropout))
             {
-                throw new Exception("idDropout not found! ");
+                throw new Exception(ErrorMessagesEnum.Dropout_ID_NotFound);
             }
             if (dropout.DropoutRate == null)
             {
-                throw new Exception("DropoutRate cannot be null! ");
+                throw new Exception(ErrorMessagesEnum.EmptyField);
             }
             if (!await _eventsService.EventExistByIdAsync(dropout.IDEvent))
             {
-                throw new Exception("Event id not found! ");
+                throw new Exception(ErrorMessagesEnum.Event_ID_NotFound);
             }
         }
         public async Task<Dropout?> UpdatePartiallyModerator(Guid idDropout, Dropout dropout)
@@ -101,7 +101,7 @@ namespace ProgrammingClub.Services
             {
                 if (GetDropoutByEventID(dropout.IDEvent) != null)
                 {
-                    throw new Exception("This Dropout already exists");
+                    throw new Exception(ErrorMessagesEnum.AlreadyExistsById);
                 }
                 dropoutFromDatabase.IDEvent = dropout.IDEvent;
                 needUpdate = true;

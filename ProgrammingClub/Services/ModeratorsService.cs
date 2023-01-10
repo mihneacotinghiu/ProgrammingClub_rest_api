@@ -85,11 +85,11 @@ namespace ProgrammingClub.Services
             }
             if (moderator.Description == null)
             {
-                throw new Exception("Description cannot be null! ");
+                throw new Exception(ErrorMessagesEnum.EmptyField);
             }
             if (moderator.Title == null)
             {
-                throw new Exception("Title cannot be null! ");
+                throw new Exception(ErrorMessagesEnum.EmptyField);
             }
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
@@ -121,7 +121,7 @@ namespace ProgrammingClub.Services
             {
                 if (GetModeratorByMemberID(moderator.IDMember) != null)
                 {
-                    throw new Exception("This Moderator already exists");
+                    throw new Exception(ErrorMessagesEnum.AlreadyExistsById);
                 }
                 moderatorFromDatabase.IDMember = moderator.IDMember;
                 needUpdate = true;
