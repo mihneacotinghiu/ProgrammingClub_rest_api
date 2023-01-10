@@ -4,6 +4,7 @@ using AutoMapper;
 using AutoMapper.Execution;
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
+using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
 using Member = ProgrammingClub.Models.Member;
@@ -29,10 +30,10 @@ namespace ProgrammingClub.Services
         {
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new Exception("Member id not found! ");
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
             }
             if (await GetModeratorByMemberID(moderator.IDMember) != null ) {
-                throw new Exception("This Moderator already exists");
+                throw new Exception(ErrorMessagesEnum.AlreadyExistsById);
             }
             var newModerator = _mapper.Map<Moderator>(moderator);
             newModerator.IDModerator = Guid.NewGuid();
@@ -80,7 +81,7 @@ namespace ProgrammingClub.Services
         {
             if (!await ModeratorExistByIdAsync(IDModerator))
             {
-                throw new Exception("IDModerator not found! ");
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
             }
             if (moderator.Description == null)
             {
@@ -92,7 +93,7 @@ namespace ProgrammingClub.Services
             }
             if (!await _membersService.MemberExistByIdAsync(moderator.IDMember))
             {
-                throw new Exception("Member id not found! ");
+                throw new Exception(ErrorMessagesEnum.ID_NotFound);
             }
         }
 
