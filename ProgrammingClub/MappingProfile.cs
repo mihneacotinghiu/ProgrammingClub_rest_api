@@ -10,8 +10,9 @@ namespace CustomerPortal.API
         {
             CreateMap<Member, CreateMember>().ReverseMap();
             CreateMap<EventType, CreateEventType>().ReverseMap();
+            CreateMap<CodeSnippet, CreateCodeSnippet>().ReverseMap();
+            CreateMap<Announcement, CreateAnnouncement>().ReverseMap();
             CreateMap<EventsParticipant, CreateEventsParticipant>().ReverseMap();
-            CreateMap<EventType, CreateEventType>().ReverseMap();
         }
     }
 }
