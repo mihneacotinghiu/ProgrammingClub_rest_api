@@ -17,5 +17,11 @@
         {
             public const string NoMemberFound = "Member doesn't exist";
         }
+
+        public static class EventsParticipantMessage
+        {
+            public const string ElementAlreadyExists = "Already in the participant list for the given event";
+            public const string MemberDoesNotExist = "Member does not exist";
+        }
     }
 }

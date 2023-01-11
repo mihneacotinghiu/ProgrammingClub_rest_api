@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Exceptions;
+using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
 using System.Linq;
@@ -33,13 +34,13 @@ namespace ProgrammingClub.Services
         public async Task CreateEventParticipant(CreateEventsParticipant participant)
         {
             if (!await _membersService.MemberExistByIdAsync(participant.IdMember))
-                throw new ElementNotFoundInDBException("Member does not exist");
+                throw new ModelValidationException(ErrorMessagesEnum.EventsParticipantMessage.MemberDoesNotExist);
 
             
             var participants = await GetAllMemberParticipations(participant.IdMember, participant.IdEvent);
             if (participants == true)
             {
-                throw new ElementAlreadyExistsInDB("Already in the participant list");
+                throw new ModelValidationException(ErrorMessagesEnum.EventsParticipantMessage.ElementAlreadyExists);
             }
 
             var newEventParticipant = _mapper.Map<EventsParticipant>(participant);
@@ -98,7 +99,7 @@ namespace ProgrammingClub.Services
                     var participants = await GetAllMemberParticipations(eventParticipant.IdMember, eventParticipant.IdEvent);
                     if (participants == true)
                     {
-                        throw new ElementAlreadyExistsInDB("Already in the participant list for the given event");
+                        throw new ModelValidationException(ErrorMessagesEnum.EventsParticipantMessage.ElementAlreadyExists);
                     }
                 }
 

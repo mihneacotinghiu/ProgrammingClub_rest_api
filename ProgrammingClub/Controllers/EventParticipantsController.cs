@@ -113,7 +113,8 @@ namespace ProgrammingClub.Controllers
                 }
                 return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
             }
-            catch(Exception ex)  
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (Exception ex)  
             { 
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
@@ -149,7 +150,8 @@ namespace ProgrammingClub.Controllers
                 }
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
-            catch (ElementAlreadyExistsInDB ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPatch]
