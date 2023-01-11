@@ -3,6 +3,7 @@ using System.Net;
 using AutoMapper;
 using AutoMapper.Execution;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
@@ -117,7 +118,7 @@ namespace ProgrammingClub.Services
                 needUpdate = true;
 
             }
-            if (moderator.Description != null && moderatorFromDatabase.Description != moderator.Description)
+            if (!string.IsNullOrEmpty(moderator.Description) && moderatorFromDatabase.Description != moderator.Description)
             {
                 moderatorFromDatabase.Description = moderator.Description;
                 needUpdate = true;
@@ -133,7 +134,7 @@ namespace ProgrammingClub.Services
             }
             if (!needUpdate)
             {
-                throw new Exception("No updates!");
+                throw new Exception(ErrorMessagesEnum.NoUpdates);
             }
             await ValidateModerator(IDModerator, moderatorFromDatabase);
             _context.Update(moderatorFromDatabase);
