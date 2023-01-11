@@ -21,6 +21,7 @@ builder.Services.AddTransient<IAnnouncementsService, AnnouncementsService>();
 builder.Services.AddTransient<IMembershipsService, MembershipsService>();
 builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddTransient<IEventsService, EventsService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPricingModelsService, PricingModelsService>();  
 builder.Logging.AddLog4Net("log4net.config");
