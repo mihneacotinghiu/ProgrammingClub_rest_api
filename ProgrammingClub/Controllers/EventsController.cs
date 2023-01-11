@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProgrammingClub.Exceptions;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
@@ -23,13 +24,13 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                var events = await _eventsService.GetEvents();
-                if(events== null || !events.Any()) {
-                    return StatusCode((int)HttpStatusCode.NoContent);
+                var events = await _eventsService.GetEventsAsync();
+                if(events == null || !events.Any()) {
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(events);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpGet("{id}")]
@@ -37,28 +38,29 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                Event? events = await _eventsService.GetEventById(id);
-                if (events != null)
+                var getEvent = await _eventsService.GetEventByIdAsync(id);
+                if (getEvent == null)
                 {
-                    return Ok(events);
+                    return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
-                return StatusCode((int)HttpStatusCode.NoContent, null);
+                return Ok(getEvent);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostMember([FromBody] CreateEvent createEvent)
+        public async Task<IActionResult> PostEvent([FromBody] CreateEvent createEvent)
         {
             try
             {
-                if(createEvent != null)
+                if(createEvent == null)
                 {
-                    await _eventsService.CreateEvent(createEvent);
-                    return Ok();
+                    return StatusCode((int)HttpStatusCode.BadRequest);
                 }
-                return StatusCode((int)HttpStatusCode.BadRequest);
+                await _eventsService.CreateEventAsync(createEvent);
+                return Ok(SuccessMessegesEnum.ElementSuccesfullyAdded);
             }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
@@ -67,14 +69,14 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
-                var result = await _eventsService.DeleteEvent(id);
+                var result = await _eventsService.DeleteEventAsync(id);
                 if (result)
                 {
                     return Ok(SuccessMessegesEnum.ElementSuccesfullyDeleted);
                 }
+                return StatusCode((int)HttpStatusCode.BadRequest, ErrorMessagesEnum.NoElementFound);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
-            return StatusCode((int)HttpStatusCode.BadRequest, "No element found");
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPut("{id}")]
@@ -86,14 +88,15 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
-                var updatedEvent = await _eventsService.UpdateEvent(id, events);
+                var updatedEvent = await _eventsService.UpdateEventAsync(id, events);
                 if(updatedEvent == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
                 }
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPatch("{id}")]
@@ -105,14 +108,15 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
-                var updatedEvent = await _eventsService.UpdatePartiallyEvent(id, events);
+                var updatedEvent = await _eventsService.UpdatePartiallyEventAsync(id, events);
                 if (updatedEvent == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
                 }
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
     }
 }
