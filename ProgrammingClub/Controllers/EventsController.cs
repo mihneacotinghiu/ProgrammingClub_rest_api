@@ -91,7 +91,7 @@ namespace ProgrammingClub.Controllers
                 var updatedEvent = await _eventsService.UpdateEventAsync(id, events);
                 if(updatedEvent == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
@@ -111,7 +111,7 @@ namespace ProgrammingClub.Controllers
                 var updatedEvent = await _eventsService.UpdatePartiallyEventAsync(id, events);
                 if (updatedEvent == null)
                 {
-                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessegesEnum.NoElementFound);
+                    return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
