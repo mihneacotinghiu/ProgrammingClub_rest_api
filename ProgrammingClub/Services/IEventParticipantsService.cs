@@ -13,7 +13,7 @@ namespace ProgrammingClub.Services
         public Task<IEnumerable<EventsParticipant>> GetAllParticipantsToEvent(Guid eventId);
         public Task CreateEventParticipant(CreateEventsParticipant participant);
         public Task<bool> DeleteEventParticipant(Guid idEventParticipant);
-        public Task<CreateEventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, CreateEventsParticipant eventParticipant);
+        public Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, CreateEventsParticipant eventParticipant);
         public Task<EventsParticipant?> UpdateEventParticipantPartially(Guid idEventParticipant, EventsParticipant participant);
         public Task<EventsParticipant?> GetEventParticipantById(Guid id);
         public Task<bool> EventParticipantExists(Guid id);

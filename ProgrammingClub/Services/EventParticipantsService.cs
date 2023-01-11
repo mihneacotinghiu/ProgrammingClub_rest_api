@@ -81,7 +81,7 @@ namespace ProgrammingClub.Services
             return await _context.EventsParticipants.Where( x => x.IdEvent==eventId).ToListAsync();
         }
 
-        public async Task<CreateEventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, CreateEventsParticipant eventParticipant)
+        public async Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, CreateEventsParticipant eventParticipant)
         {
             
             if (!await EventParticipantExists(idEventParticipant))
@@ -106,11 +106,12 @@ namespace ProgrammingClub.Services
             }
 
             eventParticipant.IdEventParticipant = idEventParticipant;
-            
 
-            _context.Update(eventParticipant);
+            var eventParticipantToSave = _mapper.Map<EventsParticipant>(eventParticipant);
+
+            _context.Update(eventParticipantToSave);
             await _context.SaveChangesAsync();
-            return eventParticipant;
+            return eventParticipantToSave;
         }
 
         public async Task<EventsParticipant?> UpdateEventParticipantPartially(Guid idEventParticipant, EventsParticipant participant)
