@@ -16,7 +16,6 @@ namespace ProgrammingClub.Controllers
     {
         private readonly ICodeSnippetsService _codeSnippetsService;
 
-
         public CodeSnippetsController(ICodeSnippetsService codeSnippetsService)
         {
             _codeSnippetsService = codeSnippetsService;
@@ -33,9 +32,8 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(codeSnippets);
-
             }
-            catch (Exception ex) {return StatusCode((int)HttpStatusCode.InternalServerError, ex);}
+            catch (Exception ex) {return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);}
         }
 
         [HttpGet("{id}")]
@@ -49,9 +47,8 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(codeSnippet);
-
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPost]
@@ -65,7 +62,6 @@ namespace ProgrammingClub.Controllers
                 }
                 await _codeSnippetsService.CreateCodeSnippetAsync(codeSnippet);
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyAdded);
-
             }
             catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
             catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
@@ -83,11 +79,11 @@ namespace ProgrammingClub.Controllers
                 }
                 return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessagesEnum.NoElementFound);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCodeSnippet([FromRoute]Guid id , [FromBody]CodeSnippet codeSnippet)
+        public async Task<IActionResult> PutCodeSnippet([FromRoute]Guid id , [FromBody]CreateCodeSnippet codeSnippet)
         {
             try
             {  
@@ -101,13 +97,10 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
-
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
-
             }
             catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
-
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPatch("{id}")]
@@ -125,12 +118,10 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);
                 }
-
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
-
             }
             catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
     }

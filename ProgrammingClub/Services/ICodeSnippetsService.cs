@@ -10,7 +10,7 @@ namespace ProgrammingClub.Services
         public Task<CodeSnippet?> GetCodeSnippetByIdAsync(Guid id);
         public Task CreateCodeSnippetAsync(CreateCodeSnippet codeSnippet);
         public Task<bool> DeleteCodeSnippetAsync(Guid id);
-        public Task<CodeSnippet?> UpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet);
+        public Task<CodeSnippet?> UpdateCodeSnippetAsync(Guid id, CreateCodeSnippet codeSnippet);
         public Task<CodeSnippet?> PartiallyUpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet);
         public Task<bool> CodeSnippetExistByIdAsync(Guid? id);
     }

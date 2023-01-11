@@ -54,14 +54,32 @@ namespace ProgrammingClub.Services
 
         public async Task<CodeSnippet?> PartiallyUpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet)
         {
-            bool codeSnippetIsChanged = false, idMemberIsChanged = false, idPreviousCodeSnippetIsChanged = false;
+            bool codeSnippetIsChanged = false;
+            bool idMemberIsChanged = false;
+            bool idPreviousCodeSnippetIsChanged = false;
+            bool ExtraValidationForUpdatesIsNeeded = true;
             var codeSnippetFromDatabase = await GetCodeSnippetByIdAsync(id);
-            var ExtraValidationForUpdatesIsNeeded = true;
             codeSnippet.IdCodeSnippet = id;
 
             if (codeSnippetFromDatabase == null)
             {
                 return null;
+            }
+            if (codeSnippet.IdSnippetPreviousVersion != codeSnippetFromDatabase.IdSnippetPreviousVersion)
+            {
+                codeSnippetFromDatabase.IdSnippetPreviousVersion = codeSnippet.IdSnippetPreviousVersion;
+                codeSnippetIsChanged = true;
+                idPreviousCodeSnippetIsChanged= true;
+            }
+            if (codeSnippet.IdMember.HasValue && codeSnippet.IdMember != codeSnippetFromDatabase.IdMember)
+            {
+                codeSnippetFromDatabase.IdMember = codeSnippet.IdMember;
+                codeSnippetIsChanged = true;
+                idMemberIsChanged = true;
+            }
+            if (idMemberIsChanged || idPreviousCodeSnippetIsChanged)
+            {
+                await ValidateCodeSnippet(codeSnippetFromDatabase, ExtraValidationForUpdatesIsNeeded);
             }
             if (codeSnippet.isPublished.HasValue && codeSnippet.isPublished != codeSnippetFromDatabase.isPublished)
             {
@@ -73,18 +91,6 @@ namespace ProgrammingClub.Services
                 codeSnippetFromDatabase.Title = codeSnippet.Title;
                 codeSnippetIsChanged = true;
             }
-            if (codeSnippet.IdMember.HasValue && codeSnippet.IdMember != codeSnippetFromDatabase.IdMember)
-            {
-                codeSnippetFromDatabase.IdMember = codeSnippet.IdMember;
-                codeSnippetIsChanged = true;
-                idMemberIsChanged= true;
-            }
-            if (codeSnippet.IdSnippetPreviousVersion != codeSnippetFromDatabase.IdSnippetPreviousVersion)
-            {
-                codeSnippetFromDatabase.IdSnippetPreviousVersion = codeSnippet.IdSnippetPreviousVersion;
-                codeSnippetIsChanged = true;
-                idPreviousCodeSnippetIsChanged= true;
-            }
             if (codeSnippet.Revision.HasValue && codeSnippet.Revision != codeSnippetFromDatabase.Revision)
             {
                 codeSnippetFromDatabase.Revision = codeSnippet.Revision;
@@ -95,33 +101,31 @@ namespace ProgrammingClub.Services
                 codeSnippetFromDatabase.DateTimeAdded = codeSnippet.DateTimeAdded;
                 codeSnippetIsChanged = true;
             }
-
             if (!codeSnippetIsChanged) 
             {
                 throw new ModelValidationException(Helpers.ErrorMessagesEnum.ZeroUpdatesToSave);
             }
-            if(idMemberIsChanged || idPreviousCodeSnippetIsChanged)
-            {
-                await ValidateCodeSnippet(codeSnippetFromDatabase, ExtraValidationForUpdatesIsNeeded);
-            }
+          
             _context.CodeSnippets.Update(codeSnippetFromDatabase);
             await _context.SaveChangesAsync();
             return codeSnippetFromDatabase;
         }
 
-        public async Task<CodeSnippet?> UpdateCodeSnippetAsync(Guid id, CodeSnippet codeSnippet)
+        public async Task<CodeSnippet?> UpdateCodeSnippetAsync(Guid id, CreateCodeSnippet codeSnippet)
         {
-            if(! await CodeSnippetExistByIdAsync(id)) 
+            if (! await CodeSnippetExistByIdAsync(id)) 
             {
                 return null;
             }
+            var codeSnippetUpdated = _mapper.Map<CodeSnippet>(codeSnippet);
+            codeSnippetUpdated.IdCodeSnippet = id;
             var ExtraValidationForUpdatesIsNeeded = true;
-            await ValidateCodeSnippet(codeSnippet, ExtraValidationForUpdatesIsNeeded);
+            await ValidateCodeSnippet(codeSnippetUpdated, ExtraValidationForUpdatesIsNeeded);
 
             codeSnippet.IdCodeSnippet= id;
-            _context.CodeSnippets.Update(codeSnippet);   
+            _context.CodeSnippets.Update(codeSnippetUpdated);   
             await _context.SaveChangesAsync();
-            return codeSnippet;
+            return codeSnippetUpdated;
         }
 
         public async Task<bool> CodeSnippetExistByIdAsync(Guid? id)
@@ -140,7 +144,7 @@ namespace ProgrammingClub.Services
             
             if (idCSPrevious.HasValue && !await CodeSnippetExistByIdAsync(idCSPrevious))
             {
-                throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.NoCodeSnippetFound);
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.NotFound);
             }
             if (!await _membersService.MemberExistByIdAsync(idMember))
             {
@@ -150,7 +154,7 @@ namespace ProgrammingClub.Services
             {
                 if(idCSPrevious.HasValue && idCSPrevious == codeSnippet.IdSnippetPreviousVersion)
                 {
-                    throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.idCSPreviousIdenticalToIdCS);
+                    throw new ModelValidationException(Helpers.ErrorMessagesEnum.CodeSnippet.IdCSPreviousIdenticalToIdCS);
                 }
             }
         }

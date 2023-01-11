@@ -33,7 +33,7 @@ namespace ProgrammingClub.Controllers
                 }
                 return Ok(announcements);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpGet("{id}")]
@@ -48,7 +48,7 @@ namespace ProgrammingClub.Controllers
                 }
                 return Ok(announcement);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPost]
@@ -80,12 +80,12 @@ namespace ProgrammingClub.Controllers
                 }
                 return StatusCode((int)HttpStatusCode.BadRequest,Helpers.ErrorMessagesEnum.NoElementFound);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
 
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAnnouncement([FromRoute]Guid id , [FromBody] Announcement announcement)
+        public async Task<IActionResult> PutAnnouncement([FromRoute]Guid id , [FromBody] CreateAnnouncement announcement)
         {
             try
             {
@@ -98,12 +98,10 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
-
-
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
             catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex); }
+            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
         }
 
         [HttpPatch("{id}")]
@@ -120,7 +118,6 @@ namespace ProgrammingClub.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
-
                 return Ok(SuccessMessegesEnum.ElementSuccesfullyUpdated);
             }
             catch (ModelValidationException ex) { return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); }

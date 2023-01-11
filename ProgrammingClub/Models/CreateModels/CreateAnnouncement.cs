@@ -7,31 +7,27 @@ namespace ProgrammingClub.Models.CreateModels
     {
         [Key]
         [JsonIgnore]
-        public Guid? IdAnnouncement { get; set; }
-
-
-        [Required]
-        public DateTime? ValidFrom { get; set; }
+        public Guid IdAnnouncement { get; set; }
 
         [Required]
-        public DateTime? ValidTo { get; set; }
+        public DateTime ValidFrom { get; set; }
 
+        [Required]
+        public DateTime ValidTo { get; set; }
 
         [StringLength(250, ErrorMessage = "Title's maximus size is 250")]
         [Required]
-        public string? Title { get; set; }
-
+        public string Title { get; set; }
 
         [StringLength(1000, ErrorMessage = "Text's maximus size is 1000")]
         [Required]
-        public string? Text { get; set; }
+        public string Text { get; set; }
 
         [Required]
-        public DateTime? EventDate { get; set; }
-
+        public DateTime EventDate { get; set; }
 
         [StringLength(1000, ErrorMessage = "Tags's maximus size is 1000")]
         [Required]
-        public string? Tags { get; set; }
+        public string Tags { get; set; }
     }
 }

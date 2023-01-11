@@ -10,8 +10,8 @@
 
         public static class CodeSnippet
         {
-            public const string NoCodeSnippetFound = "Code Snippet does't exist";
-            public const string idCSPreviousIdenticalToIdCS = "IdCodeSnippetPreviousVersion cannot be equal to IdCodeSnippet";
+            public const string NotFound = "Code Snippet does't exist";
+            public const string IdCSPreviousIdenticalToIdCS = "IdCodeSnippetPreviousVersion cannot be equal to IdCodeSnippet";
         }
         public static class Member
         {

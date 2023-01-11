@@ -54,23 +54,24 @@ namespace ProgrammingClub.Services
             return await _context.Announcements.CountAsync(a => a.IdAnnouncement == id) > 0 ;
         }
 
-        public async Task<Announcement?> UpdateAnnouncementAsync(Guid id , Announcement announcement)
+        public async Task<Announcement?> UpdateAnnouncementAsync(Guid id , CreateAnnouncement announcement)
         {
             Helpers.ValidationFunctions.TrowExceptionWhenDateIsNotValid(announcement.ValidFrom, announcement.ValidTo);
             if (!await ExistAnnounctmenAsync(id)) 
             {
                 return null;
             }
-            announcement.IdAnnouncement = id;
-            _context.Update(announcement);
+            var announcementUpdated = _mapper.Map<Announcement>(announcement);
+            announcementUpdated.IdAnnouncement = id;
+            _context.Update(announcementUpdated);
             await _context.SaveChangesAsync();
-            return announcement;
+            return announcementUpdated;
         }
 
         public async Task<Announcement?> UpdatePartiallyAnnouncementAsync(Guid id, Announcement announcement)
         {
-            
-            bool announcementIsChanged = false, dateIsChanged = false;
+            bool announcementIsChanged = false;
+            bool dateIsChanged = false;
             var announcementFromDatabase = await GetAnnounctmentByIdAsync(id);
             announcement.IdAnnouncement = id;
 
