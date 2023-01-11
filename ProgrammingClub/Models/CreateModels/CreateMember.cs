@@ -10,15 +10,15 @@ namespace ProgrammingClub.Models.CreateModels
         [JsonIgnore]
         public Guid IdMember { get; set; }
 
-        [StringLength(250, MinimumLength = 3)]
+        [StringLength(250, MinimumLength = 3, ErrorMessage = ErrorMessagesEnum.IncorrectSize)]
         [Required]
         public string Name { get; set; }
 
-        [StringLength(100, ErrorMessage = "Title's maximus size is 100")]
+        [StringLength(100, ErrorMessage = "Title's maximus size is 250")]
         [Required]
         public string Title { get; set; }
 
-        [StringLength(1000, ErrorMessage = "Descriptions's maximus size is 1000")]
+        [StringLength(1000, ErrorMessage = "Descriptions's maximus size is 250")]
         [Required]
         public string Description { get; set; }
 

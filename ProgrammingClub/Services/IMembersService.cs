@@ -13,6 +13,7 @@ namespace ProgrammingClub.Services
         public Task<Member?> UpdatePartiallyMember(Guid idMember, Member member);
         
         public Task<Member?>GetMemberById(Guid id);
-        Task<bool> MemberExistByIdAsync(Guid? id);
+
+        public Task<bool> MemberExistByIdAsync(Guid? id);
     }
 }

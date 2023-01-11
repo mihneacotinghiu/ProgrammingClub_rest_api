@@ -32,7 +32,7 @@ namespace ProgrammingClub.Services
 
         public async Task<IEnumerable<Member>> GetMembers()
         {
-            return _context.Members.ToList();
+            return await _context.Members.ToListAsync();
         }
         public async Task CreateMember(CreateMember member)
         {
@@ -82,7 +82,7 @@ namespace ProgrammingClub.Services
         {
             if (!await MemberExistByIdAsync(idMember))
             {
-                throw new NotImplementedException("Invalid Member ID! ");
+                return null;
             }
             member.IdMember = idMember;
             _context.Update(member);
@@ -97,11 +97,11 @@ namespace ProgrammingClub.Services
 
         public async Task<bool> MemberExistByIdAsync(Guid? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
-                throw new Exception(ErrorMessagesEnum.Member_ID_NotFound);
+                return false;
             }
-            return await _context.Members.CountAsync(m => m.IdMember == id) > 0;
+            return await _context.Members.AnyAsync(m => m.IdMember == id);
         }
 
     }
