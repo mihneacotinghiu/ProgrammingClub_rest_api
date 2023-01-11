@@ -111,11 +111,11 @@ namespace ProgrammingClub.Services
             }
             bool needUpdate = false;
 
-            if (moderator.Title != null && moderatorFromDatabase.Title != moderator.Title)
+            if (!string.IsNullOrEmpty(moderator.Title) && moderatorFromDatabase.Title != moderator.Title)
             {
                 moderatorFromDatabase.Title = moderator.Title;
                 needUpdate = true;
-                
+
             }
             if (moderator.Description != null && moderatorFromDatabase.Description != moderator.Description)
             {
@@ -131,12 +131,13 @@ namespace ProgrammingClub.Services
                 moderatorFromDatabase.IDMember = moderator.IDMember;
                 needUpdate = true;
             }
-            if (needUpdate)
+            if (!needUpdate)
             {
-                await ValidateModerator(IDModerator, moderatorFromDatabase);
-                _context.Update(moderatorFromDatabase);
-                await _context.SaveChangesAsync();
+                throw new Exception("No updates!");
             }
+            await ValidateModerator(IDModerator, moderatorFromDatabase);
+            _context.Update(moderatorFromDatabase);
+            await _context.SaveChangesAsync();
             return moderatorFromDatabase;
         }
 

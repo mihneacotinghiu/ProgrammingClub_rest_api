@@ -111,12 +111,13 @@ namespace ProgrammingClub.Services
                 dropoutFromDatabase.IDEvent = dropout.IDEvent;
                 needUpdate = true;
             }
-            if (needUpdate)
+            if (!needUpdate)
             {
-                await ValidateDropout(idDropout, dropoutFromDatabase);
-                _context.Update(dropoutFromDatabase);
-                await _context.SaveChangesAsync();
+                throw new Exception(ErrorMessagesEnum.NoUpdates);
             }
+            await ValidateDropout(idDropout, dropoutFromDatabase);
+            _context.Update(dropoutFromDatabase);
+            await _context.SaveChangesAsync();
             return dropoutFromDatabase;
         }
         public async Task<Dropout?> GetDropoutByEventID(Guid? eventID)

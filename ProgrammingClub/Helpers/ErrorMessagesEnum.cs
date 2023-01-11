@@ -14,6 +14,7 @@
         public const string Member_ID_NotFound = "Member  Id not found!";
 
         public const string AlreadyExistsById = "Already Exists By Id";
+        public const string NoUpdates = "No updates!";
 
     }
 }
