@@ -62,13 +62,14 @@ namespace ProgrammingClub.Services
             return await _context.Dropouts.ToListAsync();
         }
 
-        public async Task<Dropout?> UpdateDropout(Guid idDropout, Dropout dropout)
+        public async Task<Dropout?> UpdateDropout(Guid idDropout, CreateDropout dropout)
         {
-            await ValidateDropout(idDropout, dropout);
-            dropout.IDDropout = idDropout;
-            _context.Update(dropout);
+            var newDropout = _mapper.Map<Dropout>(dropout);
+            await ValidateDropout(idDropout, newDropout);
+            newDropout.IDDropout = idDropout;
+            _context.Update(newDropout);
             await _context.SaveChangesAsync();
-            return dropout;
+            return newDropout;
         }
         private async Task ValidateDropout(Guid idDropout, Dropout dropout)
         {

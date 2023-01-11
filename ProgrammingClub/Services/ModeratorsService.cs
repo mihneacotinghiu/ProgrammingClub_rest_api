@@ -72,13 +72,14 @@ namespace ProgrammingClub.Services
              return await _context.Moderators.ToListAsync();
         }
 
-        public async Task<Moderator?> UpdateModerator(Guid IDModerator, Moderator moderator)
+        public async Task<Moderator?> UpdateModerator(Guid IDModerator, CreateModerator moderator)
         {
-            await ValidateModerator(IDModerator, moderator);
-            moderator.IDModerator = IDModerator;
-            _context.Update(moderator);
+            var newModerator = _mapper.Map<Moderator>(moderator);
+            await ValidateModerator(IDModerator, newModerator);
+            newModerator.IDModerator = IDModerator;
+            _context.Update(newModerator);
             await _context.SaveChangesAsync();
-            return moderator;
+            return newModerator;
         }
 
         private async Task ValidateModerator(Guid IDModerator, Moderator moderator)

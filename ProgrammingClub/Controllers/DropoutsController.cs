@@ -83,7 +83,7 @@ namespace ProgrammingClub.Controllers
             }
 
             [HttpPut("{id}")]
-            public async Task<IActionResult> PutDropouts([FromRoute] Guid id, [FromBody] Dropout dropout)
+            public async Task<IActionResult> PutDropouts([FromRoute] Guid id, [FromBody] CreateDropout dropout)
             {
                 try
                 {

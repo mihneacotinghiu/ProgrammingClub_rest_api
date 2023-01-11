@@ -83,7 +83,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutModerator([FromRoute] Guid id, [FromBody] Moderator moderator)
+        public async Task<IActionResult> PutModerator([FromRoute] Guid id, [FromBody] CreateModerator moderator)
         {
             try
             {
