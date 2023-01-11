@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using ProgrammingClub.DataContext;
 using ProgrammingClub.Services;
 
@@ -21,6 +22,9 @@ builder.Services.AddTransient<IMembershipsService, MembershipsService>();
 builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>();
 builder.Services.AddTransient<IEventParticipantsService, EventParticipantsService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddTransient<IEventTypeService, EventTypeService>();
+builder.Services.AddTransient<IPricingModelsService, PricingModelsService>();  
+builder.Logging.AddLog4Net("log4net.config");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

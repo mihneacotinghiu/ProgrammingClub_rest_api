@@ -4,10 +4,8 @@
     {
         public const string NoElementFound = "No element found in table!";
 
-        public const string InternalServerError = "There appears to have been a problem with the server!";
 
         public const string  IncorectSize= "Incorext size";
-
-
+        public const string InternalServerError = "Internal server error please contact your administrator";
     }
 }
