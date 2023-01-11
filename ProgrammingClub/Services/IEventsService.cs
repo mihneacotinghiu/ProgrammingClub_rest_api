@@ -11,5 +11,6 @@ namespace ProgrammingClub.Services
         public Task<Event?> UpdatePartiallyEventAsync(Guid id, Event updateEvent);
         public Task<bool> DeleteEventAsync(Guid id);
         public Task<Event?> GetEventByIdAsync(Guid id);
+        public Task<bool> EventExistByIdAsync(Guid? id);
     }
 }
