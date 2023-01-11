@@ -2,7 +2,7 @@
 {
     public class ModelValidationException : Exception
     {
-        public ModelValidationException(string messege) : base(messege)
+        public ModelValidationException(string messege) :base(messege)
         {
         }
     }

@@ -23,7 +23,6 @@ namespace ProgrammingClub.Models.CreateModels
         public string Description { get; set; }
 
         [StringLength(250, ErrorMessage = "Position's maximus size is 250")]
-
         [Required]
         public string Position { get; set; }
 
