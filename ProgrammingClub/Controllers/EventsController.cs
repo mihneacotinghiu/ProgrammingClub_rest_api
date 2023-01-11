@@ -13,10 +13,12 @@ namespace ProgrammingClub.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventsService;
+        private readonly ILogger<MembersController> _logger;
 
-        public EventsController(IEventsService eventsService)
+        public EventsController(IEventsService eventsService, ILogger<MembersController> logger)
         {
             _eventsService = eventsService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,13 +26,18 @@ namespace ProgrammingClub.Controllers
         {
             try
             {
+                _logger.LogError("GetEvents start");
                 var events = await _eventsService.GetEventsAsync();
+                _logger.LogError($"GetEvents end, total results: {events?.Count()}");
                 if(events == null || !events.Any()) {
                     return StatusCode((int)HttpStatusCode.NoContent, ErrorMessagesEnum.NoElementFound);
                 }
                 return Ok(events);
             }
-            catch (Exception ex) { return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); }
+            catch (Exception ex) {
+                _logger.LogError($"GetEvents error: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message); 
+            }
         }
 
         [HttpGet("{id}")]
@@ -80,7 +87,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent([FromRoute] Guid id, [FromBody] Event events)
+        public async Task<IActionResult> PutEvent([FromRoute] Guid id, [FromBody] CreateEvent events)
         {
             try
             {
@@ -89,6 +96,7 @@ namespace ProgrammingClub.Controllers
                     return StatusCode((int)HttpStatusCode.BadRequest);
                 }
                 var updatedEvent = await _eventsService.UpdateEventAsync(id, events);
+
                 if(updatedEvent == null)
                 {
                     return StatusCode((int)HttpStatusCode.NotFound, ErrorMessagesEnum.NoElementFound);

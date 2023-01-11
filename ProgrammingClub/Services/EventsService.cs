@@ -96,18 +96,22 @@ namespace ProgrammingClub.Services
 
         }
 
-        public async Task<Event?> UpdateEventAsync(Guid id, Event eventUpdate)
+        public async Task<Event?> UpdateEventAsync(Guid id, CreateEvent eventUpdate)
         {
             if(!await EventExistByIdAsync(id))
             {
                 return null;
             }
-            //await ValidateEvent(eventUpdate);
+            
+
+            var eventUpdated = _mapper.Map<Event>(eventUpdate);
+            eventUpdated.IdEvent = id;
+            //await ValidateEvent(eventUpdated);
 
             eventUpdate.IdEvent = id;
-            _context.Update(eventUpdate);
+            _context.Update(eventUpdated);
             await _context.SaveChangesAsync();
-            return eventUpdate;
+            return eventUpdated;
         }
 
         public async Task<Event?> GetEventByIdAsync(Guid id)
