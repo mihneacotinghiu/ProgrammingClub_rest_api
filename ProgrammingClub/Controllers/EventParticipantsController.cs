@@ -134,7 +134,7 @@ namespace ProgrammingClub.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateEventParticipant([FromQuery]Guid idEventParticipant, [FromBody]EventsParticipant eventParticipant)
+        public async Task<IActionResult> UpdateEventParticipant([FromQuery]Guid idEventParticipant, [FromBody]CreateEventsParticipant eventParticipant)
         {
             try
             {

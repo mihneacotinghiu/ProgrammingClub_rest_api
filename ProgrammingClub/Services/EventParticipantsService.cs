@@ -81,7 +81,7 @@ namespace ProgrammingClub.Services
             return await _context.EventsParticipants.Where( x => x.IdEvent==eventId).ToListAsync();
         }
 
-        public async Task<EventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, EventsParticipant eventParticipant)
+        public async Task<CreateEventsParticipant?> UpdateEventParticipant(Guid idEventParticipant, CreateEventsParticipant eventParticipant)
         {
             
             if (!await EventParticipantExists(idEventParticipant))
