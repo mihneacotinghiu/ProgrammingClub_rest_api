@@ -11,7 +11,7 @@ namespace ProgrammingClub.Services
         public Task<bool> DeleteMember(Guid id);
         public Task<Member?> UpdateMember(Guid idMember, Member member);
         public Task<Member?> UpdatePartiallyMember(Guid idMember, Member member);
-        
+
         public Task<Member?>GetMemberById(Guid id);
 
         public Task<bool> MemberExistByIdAsync(Guid? id);

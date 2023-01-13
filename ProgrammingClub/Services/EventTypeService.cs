@@ -4,6 +4,7 @@ using ProgrammingClub.DataContext;
 using ProgrammingClub.Models;
 using System.Data;
 
+
 namespace ProgrammingClub.Services
 {
     public class EventTypeService : IEventTypeService

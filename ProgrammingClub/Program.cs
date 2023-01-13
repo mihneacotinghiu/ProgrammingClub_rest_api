@@ -21,6 +21,7 @@ builder.Services.AddTransient<IAnnouncementsService, AnnouncementsService>();
 builder.Services.AddTransient<IMembershipsService, MembershipsService>();
 builder.Services.AddTransient<IMembershipTypesService, MembershipTypesService>();
 builder.Services.AddTransient<IModeratorService, ModeratorsService>();
+builder.Services.AddTransient<IEventParticipantsService, EventParticipantsService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddTransient<IEventsService, EventsService>();
 builder.Services.AddTransient<IDropoutsService, DropoutsService>();

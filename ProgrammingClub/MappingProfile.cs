@@ -15,6 +15,7 @@ namespace CustomerPortal.API
             CreateMap<CodeSnippet, CreateCodeSnippet>().ReverseMap();
             CreateMap<Announcement, CreateAnnouncement>().ReverseMap();
             CreateMap<Dropout, CreateDropout>().ReverseMap();
+            CreateMap<EventsParticipant, CreateEventsParticipant>().ReverseMap();
         }
     }
 }

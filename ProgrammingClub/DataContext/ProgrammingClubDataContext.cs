@@ -19,6 +19,8 @@ namespace ProgrammingClub.DataContext
         public DbSet<Event> Events { get; set; }
         public DbSet<EventType> EventType { get; set; } 
         public DbSet<PricingModel> PricingModels { get; set; }
+        public DbSet<EventsParticipant> EventsParticipants { get; set; }
+
         public DbSet<Dropout> Dropouts { get; set; }
     }
 }
