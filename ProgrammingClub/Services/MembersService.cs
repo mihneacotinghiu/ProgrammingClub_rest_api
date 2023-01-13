@@ -24,7 +24,6 @@ namespace ProgrammingClub.Services
         {
             if (!await MemberExistByIdAsync(id))
                 return false;
-
             _context.Members.Remove(new Member { IdMember = id });
             await _context.SaveChangesAsync();
             return true;
