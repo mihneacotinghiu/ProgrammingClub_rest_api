@@ -12,9 +12,20 @@ namespace UnitTests.Helpers
 {
     public class DBContextHelper
     {
-        public static async Task<Member> AddTestMember(ProgrammingClubDataContext context)
+        public static ProgrammingClubDataContext GetDatabaseContext()
         {
-            var testMember = new MemberBuilder().Build();
+            var options = new DbContextOptionsBuilder<ProgrammingClubDataContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                .Options;
+            var databaseContext = new ProgrammingClubDataContext(options);
+            databaseContext.Database.EnsureCreated();
+            return databaseContext;
+        }
+
+        public static async Task<Member> AddTestMember(ProgrammingClubDataContext context, Member? testMember = null)
+        {
+            testMember ??= new MemberBuilder().Build();
             context.Add(testMember);
             await context.SaveChangesAsync();
             context.Entry(testMember).State = EntityState.Detached;

@@ -72,7 +72,7 @@ namespace ProgrammingClub.Services
                 memberFromDatabase.Position = member.Position;
             }
 
-            _context.Update(member);
+            _context.Update(memberFromDatabase);
             await _context.SaveChangesAsync();
             return memberFromDatabase;
         }
