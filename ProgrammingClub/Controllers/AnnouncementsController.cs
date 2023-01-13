@@ -87,7 +87,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex) 
             {
-                _logger.LogInformation($"PostAnnouncement validation exception {ex.Message}");
+                _logger.LogWarning($"PostAnnouncement validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex) 
@@ -142,7 +142,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex) 
             {
-                _logger.LogInformation($"PutAnnouncement validation exception {ex.Message}");
+                _logger.LogWarning($"PutAnnouncement validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex) 
@@ -174,7 +174,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex) 
             {
-                _logger.LogInformation($"PatchAnnouncement validation exception {ex.Message}");
+                _logger.LogWarning($"PatchAnnouncement validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex) 

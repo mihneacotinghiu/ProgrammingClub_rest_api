@@ -88,7 +88,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex) 
             {
-                _logger.LogInformation($"PostCodeSnippet validation exception {ex.Message}");
+                _logger.LogWarning($"PostCodeSnippet validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex) 
@@ -143,7 +143,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex)
             {
-                _logger.LogInformation($"PutCodeSnippet validation exception {ex.Message}");
+                _logger.LogWarning($"PutCodeSnippet validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); 
             }
             catch (Exception ex)
@@ -176,7 +176,7 @@ namespace ProgrammingClub.Controllers
             }
             catch (ModelValidationException ex) 
             {
-                _logger.LogInformation($"PatchCodeSnippet validation exception {ex.Message}");
+                _logger.LogWarning($"PatchCodeSnippet validation exception {ex.Message}");
                 return StatusCode((int)HttpStatusCode.BadRequest, ex.Message); 
             }
             catch (Exception ex) 
