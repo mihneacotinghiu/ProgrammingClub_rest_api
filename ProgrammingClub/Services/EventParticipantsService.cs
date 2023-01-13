@@ -13,6 +13,7 @@ namespace ProgrammingClub.Services
     {
         private readonly ProgrammingClubDataContext _context;
         private readonly IMembersService _membersService;
+        private readonly IEventsService _eventsService;
         private readonly IMapper _mapper;
 
         public EventParticipantsService(
@@ -35,6 +36,9 @@ namespace ProgrammingClub.Services
         {
             if (!await _membersService.MemberExistByIdAsync(participant.IdMember))
                 throw new ModelValidationException(ErrorMessagesEnum.EventsParticipantMessage.MemberDoesNotExist);
+
+            if (!await _eventsService.EventExistByIdAsync(participant.IdEvent))
+                throw new ModelValidationException(ErrorMessagesEnum.EventsParticipantMessage.EventDoesNotExist);
 
             
             var participants = await GetAllMemberParticipations(participant.IdMember, participant.IdEvent);
