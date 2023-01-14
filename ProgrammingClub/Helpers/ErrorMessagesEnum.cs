@@ -26,14 +26,14 @@
         }
         public static class Moderator
         {
-            public const string NoModeratorFound = "Moderator does not exist";
+            public const string NoModeratorFound = "This Moderator does not exist";
         }
 
         public const string AlreadyExistsById = "Already Exists By Id";
         public const string NoUpdates = "No updates!";
         public static class EventType
         {
-            public const string NoEventTypeFound = "EventType does not exist";
+            public const string NoEventTypeFound = "This EventType does not exist";
         }
 
     }

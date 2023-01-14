@@ -104,7 +104,7 @@ namespace ProgrammingClub.Services
             return eventTypeFromDatabase;
         }
 
-        public async Task<bool> EventTypeExistsByIdAsync(Guid id)
+        public async Task<bool> EventTypeExistsByIdAsync(Guid? id)
         {
             return await _context.EventType.AnyAsync(e => e.IdEventType == id);
         }
