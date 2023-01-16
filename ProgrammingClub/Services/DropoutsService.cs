@@ -5,6 +5,7 @@ using ProgrammingClub.DataContext;
 using ProgrammingClub.Helpers;
 using ProgrammingClub.Models;
 using ProgrammingClub.Models.CreateModels;
+using ProgrammingClub.Repositories;
 
 namespace ProgrammingClub.Services
 {
@@ -13,14 +14,18 @@ namespace ProgrammingClub.Services
         private readonly ProgrammingClubDataContext _context;
         private readonly IEventsService _eventsService;
         private readonly IMapper _mapper;
+        private readonly IDropoutsRepository _repo;
+
         public DropoutsService(
             ProgrammingClubDataContext context,
             IEventsService eventsService,
-            IMapper mapper)
+            IMapper mapper,
+            IDropoutsRepository repo)
         {
             _context = context;
             _eventsService = eventsService;
             _mapper = mapper;
+            _repo = repo;
         }
         public async Task CreateDropout(CreateDropout dropout)
         {
@@ -34,8 +39,7 @@ namespace ProgrammingClub.Services
             }
             var newDropout = _mapper.Map<Dropout>(dropout);
             newDropout.IDDropout = Guid.NewGuid();
-            _context.Entry(newDropout).State = EntityState.Added;
-            await _context.SaveChangesAsync();
+            await _repo.CreateDropout(newDropout);
         }
 
         public async Task<bool> DeleteDropout(Guid id)
@@ -122,9 +126,9 @@ namespace ProgrammingClub.Services
         }
         public async Task<Dropout?> GetDropoutByEventID(Guid? eventID)
         {
-            if (eventID == null)
+            if (!eventID.HasValue)
                 return null;
-            return await _context.Dropouts.FirstOrDefaultAsync(m => m.IDEvent == eventID);
+            return await _repo.GetDropoutByEventID(eventID.Value);
         }
         public async Task<bool> DropoutExistByIdAsync(Guid? id)
         {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProgrammingClub.DataContext;
+using ProgrammingClub.Repositories;
 using ProgrammingClub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,7 @@ builder.Services.AddTransient<IEventsService, EventsService>();
 builder.Services.AddTransient<IDropoutsService, DropoutsService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPricingModelsService, PricingModelsService>();  
+builder.Services.AddTransient<IDropoutsRepository, DropoutsRepository>();
 builder.Logging.AddLog4Net("log4net.config");
 var app = builder.Build();
 
