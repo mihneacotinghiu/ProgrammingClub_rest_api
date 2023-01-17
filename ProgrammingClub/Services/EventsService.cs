@@ -12,21 +12,21 @@ namespace ProgrammingClub.Services
     {
         private readonly ProgrammingClubDataContext _context;
         private readonly IMapper _mapper;
-        //private IModeratorsService _moderatorsService;
-        //private IEventTypesService _eventTypesService;
+        private IModeratorService _moderatorService;
+        private IEventTypeService _eventTypeService;
 
-        public EventsService(ProgrammingClubDataContext context, IMapper mapper)
+        public EventsService(ProgrammingClubDataContext context, IMapper mapper, IModeratorService moderatorService, IEventTypeService eventTypeService)
         {
             _context = context;
             _mapper = mapper;
-            //_moderatorsService = moderatorsService;
-            //_eventTypesService = eventTypesService;
+            _moderatorService = moderatorService;
+            _eventTypeService = eventTypeService;
         }
 
         public async Task CreateEventAsync(CreateEvent eventCreate)
         {  
             var newEvent = _mapper.Map<Event>(eventCreate);
-            //await ValidateEvent(newEvent);
+            await ValidateEvent(newEvent);
             newEvent.IdEvent = Guid.NewGuid();
             _context.Entry(newEvent).State = EntityState.Added;
             await _context.SaveChangesAsync();
@@ -85,10 +85,10 @@ namespace ProgrammingClub.Services
             {
                 throw new ModelValidationException(Helpers.ErrorMessagesEnum.ZeroUpdatesToSave);
             }
-            //if (idModeratorIsChanged || idEventTypeIsChanged)
-            //{
-            //    await ValidateEvent(eventFromDatabase);
-            //}
+            if (idModeratorIsChanged || idEventTypeIsChanged)
+            {
+                await ValidateEvent(eventFromDatabase);
+            }
 
             _context.Update(eventFromDatabase);
             await _context.SaveChangesAsync();
@@ -106,7 +106,7 @@ namespace ProgrammingClub.Services
 
             var eventUpdated = _mapper.Map<Event>(eventUpdate);
             eventUpdated.IdEvent = id;
-            //await ValidateEvent(eventUpdated);
+            await ValidateEvent(eventUpdated);
 
             eventUpdate.IdEvent = id;
             _context.Update(eventUpdated);
@@ -129,19 +129,19 @@ namespace ProgrammingClub.Services
             return await _context.Events.AnyAsync(e => e.IdEvent == id);
         }
 
-        //private async Task ValidateEvent(Event validateEvent)
-        //{
-        //    Guid? idModerator = validateEvent.IdModerator;
-        //    Guid? idEventType = validateEvent.IdEventType;
+        private async Task ValidateEvent(Event validateEvent)
+        {
+            Guid? idModerator = validateEvent.IdModerator;
+            Guid? idEventType = validateEvent.IdEventType;
 
-        //    if(!await _moderatorsService.ModeratorExistById(idModerator))
-        //    {
-        //        throw new ModelValidationException(Helpers.ErrorMessagesEnum.Moderator.NoModeratorFound);
-        //    }
-        //    if(!await _eventTypesService.EventTypeExistById(idEventType))
-        //    {
-        //        throw new ModelValidationException(Helpers.ErrorMessagesEnum.EventType.NoEventTypeFound);
-        //    }
-        //}
+            if (!await _moderatorService.ModeratorExistByIdAsync(idModerator))
+            {
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.Moderator.NoModeratorFound);
+            }
+            if (!await _eventTypeService.EventTypeExistsByIdAsync(idEventType))
+            {
+                throw new ModelValidationException(Helpers.ErrorMessagesEnum.EventType.NoEventTypeFound);
+            }
+        }
     }
 }
